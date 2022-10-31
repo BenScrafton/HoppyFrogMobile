@@ -2,6 +2,8 @@ package com.example.hoppyfrog;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.ActivityInfo;
+import android.hardware.SensorEventListener;
 import android.os.Bundle;
 
 public class GameActivity extends AppCompatActivity
@@ -14,6 +16,7 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         gameView = new GameView(this);
         setContentView(gameView);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override

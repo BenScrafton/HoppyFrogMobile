@@ -7,7 +7,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -21,13 +26,30 @@ public class GameView extends SurfaceView implements Runnable
     SurfaceHolder surfaceHolder;
     Canvas canvas = new Canvas();
 
-    GameObject[] gameObjects = new GameObject[1];
+    GameObject[] gameObjects = new GameObject[2];
+
+    AccelerometerInput accelerometerInput;
+
+    Camera camera;
 
     public GameView(Context context)
     {
         super(context);
+
         surfaceHolder = getHolder();
+
+        accelerometerInput = new AccelerometerInput(context, this);
+        accelerometerInput.Resume();
+
         gameObjects[0] = new Frog(context);
+        gameObjects[1] = new LillyPad(context, new Vector2(500, 500));
+
+        camera = new Camera(gameObjects[0], gameObjects, 200.0f);
+    }
+
+    public void SensorChanged(SensorEvent event)
+    {
+        gameObjects[0].<Gravity>getComponentOfType("GRAVITY").gravity = new Vector2(event.values[0] * -200, -500);
     }
 
     public void resume()
@@ -35,6 +57,8 @@ public class GameView extends SurfaceView implements Runnable
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
+
+        accelerometerInput.Resume();
     }
 
     public void pause()
@@ -45,6 +69,8 @@ public class GameView extends SurfaceView implements Runnable
         } catch (InterruptedException e){
             Log.e("GameView", "Interrupted");
         }
+
+        accelerometerInput.Pause();
     }
 
     public void run()
@@ -67,8 +93,9 @@ public class GameView extends SurfaceView implements Runnable
         {
             g.update();
         }
-    }
 
+        //camera.update();
+    }
 
     void render()
     {
@@ -84,5 +111,23 @@ public class GameView extends SurfaceView implements Runnable
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        Log.e("TOUCH EVENT", "JUMP");
+
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                Log.e("TOUCH EVENT", "JUMP2");
+                gameObjects[0].position.y -= 10.0f;
+                gameObjects[0].<Gravity>getComponentOfType("GRAVITY").grounded = false;
+                gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
+                gameObjects[0].<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+        }
+
+        return super.onTouchEvent(event);
     }
 }

@@ -25,12 +25,16 @@ public class Animator extends Component
     private Rect frameToDraw;
     private RectF whereToDraw;
 
+    Animation[] animations;
+    int animationIndex = 0;
+
     public Animator(Context context, GameObject p_gameObject, int p_spriteSheetId, int p_numFrames,
-                    int p_spriteWidth, int p_spriteHeight, float p_scale, float p_timeBetweenFrames)
+                    int p_spriteWidth, int p_spriteHeight, float p_scale, float p_timeBetweenFrames, Animation[] p_animations)
     {
         id = "ANIMATOR";
 
         gameObject = p_gameObject;
+        animations = p_animations;
 
         spriteWidth = p_spriteWidth;
         spriteHeight = p_spriteHeight;
@@ -41,7 +45,7 @@ public class Animator extends Component
         spriteSheet = BitmapFactory.decodeResource(context.getResources(), p_spriteSheetId);
         spriteSheet = Bitmap.createScaledBitmap(spriteSheet, spriteWidth * numFrames, spriteHeight, false);
 
-        frameToDraw = new Rect(0,0,spriteWidth,spriteHeight);
+        frameToDraw = new Rect(0,0,animations[animationIndex].spriteWidth, animations[animationIndex].spriteHeight);
         whereToDraw = new RectF(100, 100, 200, 200);
     }
 
@@ -56,27 +60,46 @@ public class Animator extends Component
     {
         timer += Time.getInstance().deltaTime;
 
-        if(timer >= timeBetweenFrames)
+        if(timer >= animations[animationIndex].timeBetweenFrames)
         {
             //Next Frame
-            if(currentFrame < numFrames - 1)
+            if(currentFrame < animations[animationIndex].numFrames - 1)
             {
                 currentFrame++;
+                timer = 0.0f;
             }
             else
             {
-                currentFrame = 0;
+                if(!animations[animationIndex].playOnce)
+                {
+                    currentFrame = 0;
+                    timer = 0.0f;
+                }
             }
-
-            timer = 0.0f;
-            frameToDraw.left = currentFrame * spriteWidth;
-            frameToDraw.right = frameToDraw.left + spriteWidth;
+            frameToDraw.left = currentFrame * animations[animationIndex].spriteWidth;
+            frameToDraw.right = frameToDraw.left + animations[animationIndex].spriteWidth;
         }
+    }
+
+    public void changeAnimation(int index)
+    {
+        animationIndex = index;
+        timer = 0.0f;
+        currentFrame = 0;
+    }
+
+    public void setAnimationIndex(int index)
+    {
+        if(currentFrame > animations[index].numFrames - 1)
+        {
+            currentFrame = 0;
+        }
+        animationIndex = index;
     }
 
     public void draw(Canvas canvas)
     {
         whereToDraw.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scale, gameObject.position.y + scale);
-        canvas.drawBitmap(spriteSheet, frameToDraw, whereToDraw, null);
+        canvas.drawBitmap(animations[animationIndex].spriteSheet, frameToDraw, whereToDraw, null);
     }
 }

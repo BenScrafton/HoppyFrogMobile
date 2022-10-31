@@ -29,12 +29,21 @@ public class Gravity extends Component
             velocity.x += gravity.x * Time.getInstance().deltaTime;
             velocity.y += gravity.y * Time.getInstance().deltaTime;
 
-            gameObject.position.x -= velocity.x * Time.getInstance().deltaTime;
-            gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
+            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x += gravity.x * Time.getInstance().deltaTime;
+            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y += gravity.y * Time.getInstance().deltaTime;
 
-            String s = Float.toString(gameObject.position.y);
 
-            Log.e("HELP", s);
+
+            //gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
+            //gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
+        }
+        else
+        {
+            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x = 0;
+            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y = 0;
+
+            velocity.x = 0;
+            velocity.y = 0;
         }
     }
 }
