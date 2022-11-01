@@ -26,11 +26,13 @@ public class GameView extends SurfaceView implements Runnable
     SurfaceHolder surfaceHolder;
     Canvas canvas = new Canvas();
 
-    GameObject[] gameObjects = new GameObject[2];
+    GameObject[] gameObjects = new GameObject[11];
 
     AccelerometerInput accelerometerInput;
 
     Camera camera;
+
+    PadPlacer padPlacer;
 
     public GameView(Context context)
     {
@@ -42,7 +44,10 @@ public class GameView extends SurfaceView implements Runnable
         accelerometerInput.Resume();
 
         gameObjects[0] = new Frog(context);
-        gameObjects[1] = new LillyPad(context, new Vector2(500, 500));
+        gameObjects[1] = new LillyPad(context, new Vector2(500, 1800));
+
+        padPlacer = new PadPlacer(context, gameObjects, new Vector2(100, 1800), 200, 1000);
+
 
         camera = new Camera(gameObjects[0], gameObjects, 200.0f);
     }
@@ -94,7 +99,9 @@ public class GameView extends SurfaceView implements Runnable
             g.update();
         }
 
-        //camera.update();
+
+        padPlacer.update();
+        camera.update();
     }
 
     void render()

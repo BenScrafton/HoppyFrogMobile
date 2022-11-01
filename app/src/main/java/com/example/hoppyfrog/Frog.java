@@ -1,6 +1,7 @@
 package com.example.hoppyfrog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -9,7 +10,10 @@ public class Frog extends GameObject
 {
     public Frog(Context context)
     {
-        position = new Vector2(500, 300);
+
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        position = new Vector2((width / 2) - 100, height / 2);
 
         //--------------------COMPONENT_SETUP--------------------//
 
