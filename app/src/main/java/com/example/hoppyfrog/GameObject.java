@@ -48,4 +48,9 @@ public class GameObject implements Observer
 
     }
 
+    public void OnCollisionExit(CollisionSide side)
+    {
+
+    }
+
 }

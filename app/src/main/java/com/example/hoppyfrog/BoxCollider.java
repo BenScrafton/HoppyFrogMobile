@@ -15,6 +15,8 @@ public class BoxCollider extends Component
     static List<BoxCollider> boxColliders = new ArrayList<BoxCollider>();
     public RectF lastBox;
 
+    CollisionData collisionData = new CollisionData(false, CollisionSide.NONE);
+
     boolean isStatic = false;
 
     BoxCollider(GameObject p_gameObject, float p_scaleX, float p_scaleY, boolean p_isStatic)
@@ -34,6 +36,8 @@ public class BoxCollider extends Component
     {
         super.update();
 
+
+
         UpdateBounds();
         CheckCollisions();
         lastBox.set((float) box.left, (float) box.top, (float) box.right, (float) box.bottom);
@@ -50,58 +54,6 @@ public class BoxCollider extends Component
 
         lastBox.set(lastBox.left - deltaPos.x, lastBox.top - deltaPos.y,
          lastBox.right - deltaPos.x, lastBox.bottom - deltaPos.y);
-    }
-
-    void CheckCollisionsOLD()
-    {
-        for(BoxCollider collider : boxColliders)
-        {
-            if(collider != this)
-            {
-                if((this.box.right >= collider.box.left) && (this.box.left <= collider.box.right) &&
-                        (this.box.top <= collider.box.bottom) && (this.box.bottom >= collider.box.top))
-                {
-                    if(gameObject.<Gravity>getComponentOfType("GRAVITY") != null)
-                    {
-                        //if(gameObject.<Gravity>getComponentOfType("GRAVITY").grounded = true)
-                        //{
-                            //gameObject.<Gravity>getComponentOfType("GRAVITY").grounded = true;
-                        //}
-
-                        CollisionSide side;
-                        float overlapDist;
-
-                        //Log.e("COLLISION CHECK: ", Float.toString(lastBox.bottom) + " : " + Float.toString(collider.box.top) + " : " + Float.toString(box.bottom - collider.box.top));
-
-                        //Log.e("COLLISION CHECK: ", Float.toString(lastBox.bottom) + " : " + Float.toString(box.bottom));
-
-                        if((lastBox.bottom < box.bottom) && (box.bottom > collider.box.top) && (lastBox.bottom < collider.box.top)) // Moved Down and Overlapped on Top of collider
-                        {
-                            side = CollisionSide.BOTTOM;
-                            overlapDist = box.bottom - collider.box.top;
-                        }
-                        else if((lastBox.top > box.top) && (box.top < collider.box.bottom) && (lastBox.top > collider.box.bottom)) // Moved Up and Overlapped on Bottom of collider
-                        {
-                            side = CollisionSide.TOP;
-                            overlapDist = Math.abs(box.top - collider.box.bottom);
-                        }
-                        else if((lastBox.left > box.left) && (box.left < collider.box.right)) // Moved Left and Overlapped Right of collider
-                        {
-                            side = CollisionSide.LEFT;
-                            overlapDist = Math.abs(box.left - collider.box.right);
-                        }
-                        else // MUST HAVE :  Moved Right and Overlapped Left of collider
-                        {
-                            side = CollisionSide.RIGHT;
-                            overlapDist =  Math.abs(box.right - collider.box.left);
-                        }
-
-                        Collision collision = new Collision(side, overlapDist);
-                        gameObject.OnCollision(collision);
-                    }
-                }
-            }
-        }
     }
 
     void CheckCollisions()
@@ -125,19 +77,18 @@ public class BoxCollider extends Component
                 }
             }
 
+            collisionData.isColliding = false;
+
+
             if(collided)
             {
                 CollisionSide side;
                 float overlapDist;
 
-
                 if(lastBox.bottom < collider.box.top)
                 {
                     side = CollisionSide.BOTTOM;
                     overlapDist = collider.box.top - box.bottom;
-
-                    Log.e("CHECKER", "LAST BOX: " + Float.toString(lastBox.bottom) + " : " + Float.toString(collider.box.top)  + "," + Float.toString(box.bottom) + "," + Float.toString(overlapDist));
-
                 }
                 else if(lastBox.top > collider.box.bottom)
                 {
@@ -154,15 +105,19 @@ public class BoxCollider extends Component
                     side = CollisionSide.RIGHT;
                     overlapDist = collider.box.left - box.right;
                 }
-                //side = CollisionSide.BOTTOM;
-                //overlapDist = collider.box.top - box.bottom;
-
 
                 Collision collision = new Collision(side, overlapDist);
+
+                collisionData.side = side;
+                collisionData.isColliding = true;
+
                 gameObject.OnCollision(collision);
 
                 lastBox.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scaleX, gameObject.position.y + scaleY);
-
+            }
+            else
+            {
+                gameObject.OnCollisionExit(collisionData.side);
             }
         }
     }

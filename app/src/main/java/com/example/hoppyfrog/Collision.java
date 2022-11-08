@@ -6,6 +6,7 @@ enum CollisionSide
     RIGHT,
     LEFT,
     BOTTOM,
+    NONE,
 }
 
 public class Collision

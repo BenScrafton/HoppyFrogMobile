@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class Animator extends Component
@@ -52,7 +53,7 @@ public class Animator extends Component
     @Override
     public void update()
     {
-        super.update();
+        //super.update();
         updateAnimFrame();
     }
 
@@ -99,6 +100,11 @@ public class Animator extends Component
 
     public void draw(Canvas canvas)
     {
+        Log.e("Animation", currentFrame + " " + animationIndex);
+
+        frameToDraw.left = currentFrame * animations[animationIndex].spriteWidth;
+        frameToDraw.right = frameToDraw.left + animations[animationIndex].spriteWidth;
+
         whereToDraw.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scale, gameObject.position.y + scale);
         canvas.drawBitmap(animations[animationIndex].spriteSheet, frameToDraw, whereToDraw, null);
     }

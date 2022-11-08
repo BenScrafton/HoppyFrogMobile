@@ -8,9 +8,10 @@ import android.util.Log;
 
 public class Frog extends GameObject
 {
+    boolean canDoubleJump = true;
+
     public Frog(Context context)
     {
-
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
         position = new Vector2((width / 2) - 100, height / 2);
@@ -85,11 +86,53 @@ public class Frog extends GameObject
                 position.y += collision.overlapDistance -1;
                 this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
                 this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
+                this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
+                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(0);
+                canDoubleJump = true;
                 break;
         }
         //position.y -= 10000;
 
         //this.<Gravity>getComponentOfType("GRAVITY").SetGrounded(true);
+
+    }
+
+    @Override
+    public void OnCollisionExit(CollisionSide side)
+    {
+        super.OnCollisionExit(side);
+
+        switch (side)
+        {
+            case TOP:
+                break;
+            case RIGHT:
+                break;
+            case LEFT:
+                break;
+            case BOTTOM:
+                this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
+                break;
+            case NONE:
+                break;
+        }
+
+
+    }
+
+    public void Jump()
+    {
+        if(this.<Gravity>getComponentOfType("GRAVITY").grounded || canDoubleJump)
+        {
+            if(!this.<Gravity>getComponentOfType("GRAVITY").grounded)
+            {
+                canDoubleJump = false;
+            }
+
+            this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
+            this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
+            this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+        }
 
     }
 }

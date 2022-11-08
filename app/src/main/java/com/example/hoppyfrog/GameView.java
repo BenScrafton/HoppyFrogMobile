@@ -56,7 +56,8 @@ public class GameView extends SurfaceView implements Runnable
 
     public void SensorChanged(SensorEvent event)
     {
-        gameObjects[0].<Gravity>getComponentOfType("GRAVITY").gravity = new Vector2(event.values[0] * -200, -500);
+        //gameObjects[0].<Gravity>getComponentOfType("GRAVITY").gravity = new Vector2(event.values[0] * -200, -500);
+        gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( event.values[0] * -100 ,gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity.y);
     }
 
     public void resume()
@@ -107,6 +108,7 @@ public class GameView extends SurfaceView implements Runnable
 
     void render()
     {
+//        Log.e("Animation", "Render");
         if(surfaceHolder.getSurface().isValid())
         {
             camera.update();
@@ -133,9 +135,7 @@ public class GameView extends SurfaceView implements Runnable
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                gameObjects[0].<Gravity>getComponentOfType("GRAVITY").grounded = false;
-                gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
-                gameObjects[0].<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+                ((Frog) gameObjects[0]).Jump();
         }
 
         return super.onTouchEvent(event);
