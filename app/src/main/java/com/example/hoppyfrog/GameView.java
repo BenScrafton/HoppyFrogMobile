@@ -1,6 +1,7 @@
 package com.example.hoppyfrog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -39,14 +40,15 @@ public class GameView extends SurfaceView implements Runnable
         super(context);
 
         surfaceHolder = getHolder();
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
 
         accelerometerInput = new AccelerometerInput(context, this);
         accelerometerInput.Resume();
 
         gameObjects[0] = new Frog(context);
-        gameObjects[1] = new LillyPad(context, new Vector2(500, 1800));
 
-        padPlacer = new PadPlacer(context, gameObjects, new Vector2(100, 1800), 200, 1000);
+        padPlacer = new PadPlacer(context, gameObjects, new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);
 
 
         camera = new Camera(gameObjects[0], gameObjects, 200.0f);
@@ -99,22 +101,27 @@ public class GameView extends SurfaceView implements Runnable
             g.update();
         }
 
-
         padPlacer.update();
-        camera.update();
+
     }
 
     void render()
     {
         if(surfaceHolder.getSurface().isValid())
         {
+            camera.update();
+
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.BLUE);
 
             for(GameObject g : gameObjects)
             {
-                g.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
+                if(g != gameObjects[0])
+                {
+                    g.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
+                }
             }
+            gameObjects[0].<Animator>getComponentOfType("ANIMATOR").draw(canvas);
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
@@ -123,13 +130,9 @@ public class GameView extends SurfaceView implements Runnable
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        Log.e("TOUCH EVENT", "JUMP");
-
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                Log.e("TOUCH EVENT", "JUMP2");
-                gameObjects[0].position.y -= 10.0f;
                 gameObjects[0].<Gravity>getComponentOfType("GRAVITY").grounded = false;
                 gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
                 gameObjects[0].<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);

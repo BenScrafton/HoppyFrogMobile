@@ -24,15 +24,10 @@ public class Camera
 
         for(GameObject object : sceneObjects)
         {
-            if(deltaPos.x != 0)
-            {
-                object.position.x -= deltaPos.x; /// (Math.abs(deltaPos.x)) * moveSpeed * Time.getInstance().deltaTime;
-            }
+            object.position.x -= deltaPos.x; /// (Math.abs(deltaPos.x)) * moveSpeed * Time.getInstance().deltaTime;
+            object.position.y -= deltaPos.y; /// (Math.abs(deltaPos.y)) * moveSpeed * Time.getInstance().deltaTime;
 
-            if (deltaPos.y != 0)
-            {
-                object.position.y -= deltaPos.y; /// (Math.abs(deltaPos.y)) * moveSpeed * Time.getInstance().deltaTime;
-            }
+            object.<BoxCollider>getComponentOfType("BOXCOLLIDER").AccountForCameraUpdate(deltaPos);
         }
 
         lastPos = new Vector2(followObject.position.x , followObject.position.y);

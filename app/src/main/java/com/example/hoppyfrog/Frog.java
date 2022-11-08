@@ -46,8 +46,10 @@ public class Frog extends GameObject
         components.add(gravity);
 
         //-----BOXCOLLIDER_SETUP-----//
-        BoxCollider collider = new BoxCollider(this, 200, 200);
+        BoxCollider collider = new BoxCollider(this, 200, 200, false);
         components.add(collider);
+
+
     }
 
     @Override
@@ -58,5 +60,36 @@ public class Frog extends GameObject
         {
             this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
         }
+    }
+
+    @Override
+    public void OnCollision(Collision collision)
+    {
+        super.OnCollision(collision);
+        Log.e("COLLISION SIDE:", collision.collisionSide.toString());
+        Log.e("COLLISION OVERLAP:", Float.toString(collision.overlapDistance));
+
+        switch (collision.collisionSide)
+        {
+            case TOP:
+                //position.y += collision.overlapDistance + 2;
+                break;
+            case RIGHT:
+                //position.x += collision.overlapDistance + 2;
+                break;
+            case LEFT:
+                //position.x += collision.overlapDistance + 2;
+                break;
+            case BOTTOM:
+
+                position.y += collision.overlapDistance -1;
+                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
+                this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
+                break;
+        }
+        //position.y -= 10000;
+
+        //this.<Gravity>getComponentOfType("GRAVITY").SetGrounded(true);
+
     }
 }

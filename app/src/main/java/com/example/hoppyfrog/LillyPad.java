@@ -20,7 +20,7 @@ public class LillyPad extends GameObject
         components.add(animator);
 
         //-----BOXCOLLIDER_SETUP-----//
-        BoxCollider collider = new BoxCollider(this, 200, 200);
+        BoxCollider collider = new BoxCollider(this, 200, 25, true);
         components.add(collider);
     }
 }

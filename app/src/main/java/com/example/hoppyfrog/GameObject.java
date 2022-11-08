@@ -13,9 +13,6 @@ public class GameObject implements Observer
     Vector2 scale = new Vector2(200, 200);
     ArrayList<Component> components  = new ArrayList<>();
 
-
-
-
     public void update()
     {
         for(Component c : components)
@@ -38,10 +35,17 @@ public class GameObject implements Observer
     }
 
     @Override
-    public void onNotify(GameObject object, Event event) {
+    public void onNotify(GameObject object, Event event)
+    {
         if(event.eventType == EventType.ON_GROUNDED)
         {
 
         }
     }
+
+    public void OnCollision(Collision collision)
+    {
+
+    }
+
 }

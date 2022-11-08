@@ -32,12 +32,16 @@ public class Gravity extends Component
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x += gravity.x * Time.getInstance().deltaTime;
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y += gravity.y * Time.getInstance().deltaTime;
 
-
-
             //gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
             //gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
         }
-        else
+    }
+
+    void SetGrounded(boolean g)
+    {
+        grounded = g;
+
+        if(g)
         {
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x = 0;
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y = 0;
