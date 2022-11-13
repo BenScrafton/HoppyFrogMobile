@@ -106,7 +106,7 @@ public class BoxCollider extends Component
                     overlapDist = collider.box.left - box.right;
                 }
 
-                Collision collision = new Collision(side, overlapDist);
+                Collision collision = new Collision(side, overlapDist, collider.gameObject);
 
                 collisionData.side = side;
                 collisionData.isColliding = true;

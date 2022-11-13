@@ -6,6 +6,7 @@ public class LillyPad extends GameObject
 {
     public LillyPad(Context context, Vector2 pos)
     {
+        tag = "LillyPad";
         position = pos;
 
         //--------------------COMPONENT_SETUP--------------------//
@@ -14,8 +15,7 @@ public class LillyPad extends GameObject
         Animation[] animations = new Animation[1];
         animations[0] = new Animation(context, R.drawable.lilly1, 1, 16, 16, 200, 0.0f, true);
 
-        Animator animator = new Animator(context, this, R.drawable.lilly1,
-                1, 16, 16, 200, 0.5f, animations);
+        Animator animator = new Animator(context, this, new Vector2(200,200), animations);
 
         components.add(animator);
 

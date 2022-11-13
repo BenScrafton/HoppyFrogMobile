@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Debug;
 import android.util.Log;
 
 public class Frog extends GameObject
 {
     boolean canDoubleJump = true;
+    boolean isAlive = true;
 
     public Frog(Context context)
     {
@@ -19,7 +21,7 @@ public class Frog extends GameObject
         //--------------------COMPONENT_SETUP--------------------//
 
         //-----ANIMATOR_SETUP-----//
-        Animation[] animations = new Animation[3];
+        Animation[] animations = new Animation[4];
 
         Animation idle = new Animation(context, R.drawable.anim_frog_idle, 2,
                 16, 16, 200, 0.5f, false);
@@ -27,14 +29,15 @@ public class Frog extends GameObject
                 16, 16, 200, 0.5f, true);
         Animation landing = new Animation(context, R.drawable.anim_frog_crouch, 3,
                 16, 16, 200, 0.5f, true);
+        Animation death = new Animation(context, R.drawable.anim_frog_death, 9,
+                16, 16, 200, 0.07f, true);
 
         animations[0] = idle;
         animations[1] =  acending;
         animations[2] = landing;
+        animations[3] = death;
 
-        Animator animator = new Animator(context, this, R.drawable.anim_frog_idle,
-                2, 16, 16, 200, 0.5f, animations);
-
+        Animator animator = new Animator(context, this, new Vector2(200, 200), animations);
         components.add(animator);
 
         //-----MOVEMENT_SETUP-----//
@@ -49,17 +52,14 @@ public class Frog extends GameObject
         //-----BOXCOLLIDER_SETUP-----//
         BoxCollider collider = new BoxCollider(this, 200, 200, false);
         components.add(collider);
-
-
     }
 
     @Override
     public void update()
     {
-        super.update();
-        if(this.<Gravity>getComponentOfType("GRAVITY").grounded)
+
         {
-            this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
+            super.update();
         }
     }
 
@@ -67,34 +67,40 @@ public class Frog extends GameObject
     public void OnCollision(Collision collision)
     {
         super.OnCollision(collision);
-        Log.e("COLLISION SIDE:", collision.collisionSide.toString());
-        Log.e("COLLISION OVERLAP:", Float.toString(collision.overlapDistance));
 
-        switch (collision.collisionSide)
+        if(collision.collider.tag == "LillyPad" && isAlive)
         {
-            case TOP:
-                //position.y += collision.overlapDistance + 2;
-                break;
-            case RIGHT:
-                //position.x += collision.overlapDistance + 2;
-                break;
-            case LEFT:
-                //position.x += collision.overlapDistance + 2;
-                break;
-            case BOTTOM:
-
-                position.y += collision.overlapDistance -1;
-                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
-                this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
-                this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
-                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(0);
-                canDoubleJump = true;
-                break;
+            switch (collision.collisionSide)
+            {
+                case TOP:
+                    //position.y += collision.overlapDistance + 2;
+                    break;
+                case RIGHT:
+                    //position.x += collision.overlapDistance + 2;
+                    break;
+                case LEFT:
+                    //position.x += collision.overlapDistance + 2;
+                    break;
+                case BOTTOM:
+                    position.y += collision.overlapDistance -1;
+                    this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
+                    this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
+                    this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
+                    this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
+                    canDoubleJump = true;
+                    break;
+            }
         }
-        //position.y -= 10000;
+        else if(collision.collider.tag == "Lava")
+        {
+            if(isAlive)
+            {
+                isAlive = false;
 
-        //this.<Gravity>getComponentOfType("GRAVITY").SetGrounded(true);
-
+                Log.e("On Collision", "change anim");
+                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
+            }
+        }
     }
 
     @Override
@@ -116,8 +122,6 @@ public class Frog extends GameObject
             case NONE:
                 break;
         }
-
-
     }
 
     public void Jump()
@@ -128,7 +132,6 @@ public class Frog extends GameObject
             {
                 canDoubleJump = false;
             }
-
             this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
             this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
             this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);

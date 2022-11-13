@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Sensor;
@@ -27,13 +28,14 @@ public class GameView extends SurfaceView implements Runnable
     SurfaceHolder surfaceHolder;
     Canvas canvas = new Canvas();
 
-    GameObject[] gameObjects = new GameObject[11];
+    GameObject[] gameObjects = new GameObject[12];
 
     AccelerometerInput accelerometerInput;
 
     Camera camera;
-
     PadPlacer padPlacer;
+
+    GameObject background;
 
     public GameView(Context context)
     {
@@ -48,8 +50,9 @@ public class GameView extends SurfaceView implements Runnable
 
         gameObjects[0] = new Frog(context);
 
+        background = new Background(context);
         padPlacer = new PadPlacer(context, gameObjects, new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);
-
+        gameObjects[11] = new Lava(context);
 
         camera = new Camera(gameObjects[0], gameObjects, 200.0f);
     }
@@ -103,18 +106,20 @@ public class GameView extends SurfaceView implements Runnable
         }
 
         padPlacer.update();
+        background.update();
 
     }
 
     void render()
     {
-//        Log.e("Animation", "Render");
         if(surfaceHolder.getSurface().isValid())
         {
             camera.update();
 
             canvas = surfaceHolder.lockCanvas();
-            canvas.drawColor(Color.BLUE);
+
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            background.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
 
             for(GameObject g : gameObjects)
             {
@@ -124,7 +129,6 @@ public class GameView extends SurfaceView implements Runnable
                 }
             }
             gameObjects[0].<Animator>getComponentOfType("ANIMATOR").draw(canvas);
-
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
