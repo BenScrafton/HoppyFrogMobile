@@ -9,7 +9,8 @@ import android.util.Log;
 
 public class Frog extends GameObject
 {
-    boolean canDoubleJump = true;
+    int numJumps = 2;
+    int numJumpsLeft = 2;
     boolean isAlive = true;
     LavaSplash lavaSplash;
 
@@ -86,7 +87,8 @@ public class Frog extends GameObject
                     this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
                     this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
                     this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
-                    canDoubleJump = true;
+
+                    numJumpsLeft = numJumps;
                     break;
             }
         }
@@ -99,7 +101,6 @@ public class Frog extends GameObject
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
                 this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
-
             }
         }
     }
@@ -127,15 +128,13 @@ public class Frog extends GameObject
 
     public void Jump()
     {
-        if(this.<Gravity>getComponentOfType("GRAVITY").grounded || canDoubleJump)
+        if(numJumpsLeft > 0)
         {
-            if(!this.<Gravity>getComponentOfType("GRAVITY").grounded)
-            {
-                canDoubleJump = false;
-            }
             this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
             this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
             this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+
+            numJumpsLeft--;
         }
     }
 }

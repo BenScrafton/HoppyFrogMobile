@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -126,6 +127,9 @@ public class GameView extends SurfaceView implements Runnable
                     g.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
                 }
             }
+
+
+
             gameObjects[0].<Animator>getComponentOfType("ANIMATOR").draw(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
