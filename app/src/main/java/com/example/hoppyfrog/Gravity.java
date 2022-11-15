@@ -19,7 +19,10 @@ public class Gravity extends Component
     public void update()
     {
         super.update();
-        updatePosition();
+        if(isActive)
+        {
+            updatePosition();
+        }
     }
 
     void updatePosition()
@@ -31,9 +34,6 @@ public class Gravity extends Component
 
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x += gravity.x * Time.getInstance().deltaTime;
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y += gravity.y * Time.getInstance().deltaTime;
-
-            //gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
-            //gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
         }
     }
 

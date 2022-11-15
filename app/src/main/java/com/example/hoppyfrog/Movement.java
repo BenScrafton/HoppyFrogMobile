@@ -16,7 +16,11 @@ public class Movement extends Component
     public void update()
     {
         super.update();
-        gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
-        gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
+
+        if(isActive)
+        {
+            gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
+            gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
+        }
     }
 }

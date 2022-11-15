@@ -13,14 +13,9 @@ import android.view.SurfaceHolder;
 
 public class Animator extends Component
 {
-    Bitmap spriteSheet;
-    int numFrames;
-    int spriteWidth;
-    int spriteHeight;
     int currentFrame = 0;
     Vector2 scale;
 
-    float timeBetweenFrames;
     float timer = 0.0f;
 
     private Rect frameToDraw;
@@ -46,7 +41,10 @@ public class Animator extends Component
     public void update()
     {
         //super.update();
-        updateAnimFrame();
+        if(isActive)
+        {
+            updateAnimFrame();
+        }
     }
 
     void updateAnimFrame()

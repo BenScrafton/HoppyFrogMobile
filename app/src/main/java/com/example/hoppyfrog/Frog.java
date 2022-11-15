@@ -11,9 +11,11 @@ public class Frog extends GameObject
 {
     boolean canDoubleJump = true;
     boolean isAlive = true;
+    LavaSplash lavaSplash;
 
     public Frog(Context context)
     {
+        lavaSplash = new LavaSplash(context);
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
         position = new Vector2((width / 2) - 100, height / 2);
@@ -57,10 +59,7 @@ public class Frog extends GameObject
     @Override
     public void update()
     {
-
-        {
-            super.update();
-        }
+        super.update();
     }
 
     @Override
@@ -96,9 +95,11 @@ public class Frog extends GameObject
             if(isAlive)
             {
                 isAlive = false;
-
                 Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
+                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
+                this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+
             }
         }
     }
@@ -136,6 +137,5 @@ public class Frog extends GameObject
             this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
             this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
         }
-
     }
 }

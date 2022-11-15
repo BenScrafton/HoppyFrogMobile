@@ -36,11 +36,12 @@ public class BoxCollider extends Component
     {
         super.update();
 
-
-
-        UpdateBounds();
-        CheckCollisions();
-        lastBox.set((float) box.left, (float) box.top, (float) box.right, (float) box.bottom);
+        if(isActive)
+        {
+            UpdateBounds();
+            CheckCollisions();
+            lastBox.set((float) box.left, (float) box.top, (float) box.right, (float) box.bottom);
+        }
     }
 
     void UpdateBounds()

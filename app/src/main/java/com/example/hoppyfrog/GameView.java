@@ -59,7 +59,6 @@ public class GameView extends SurfaceView implements Runnable
 
     public void SensorChanged(SensorEvent event)
     {
-        //gameObjects[0].<Gravity>getComponentOfType("GRAVITY").gravity = new Vector2(event.values[0] * -200, -500);
         gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( event.values[0] * -100 ,gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity.y);
     }
 
@@ -107,7 +106,6 @@ public class GameView extends SurfaceView implements Runnable
 
         padPlacer.update();
         background.update();
-
     }
 
     void render()
