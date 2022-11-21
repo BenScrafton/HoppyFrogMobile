@@ -9,6 +9,10 @@ public class Score extends GameObject
     {
         position = new Vector2(0,0);
 
+
+        //--------------------COMPONENT_SETUP--------------------//
+
+        //-----UI_TEXT_SETUP-----//
         Paint paint =  new Paint();
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);

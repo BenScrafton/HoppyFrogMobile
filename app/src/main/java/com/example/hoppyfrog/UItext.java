@@ -9,14 +9,12 @@ public class UItext extends Component
     Paint paint;
     String text;
 
-    UItext(GameObject p_gameObject, String text, Paint p_paint)
+    UItext(GameObject p_gameObject, String p_text, Paint p_paint)
     {
-
         id = "UI_TEXT";
+        text = p_text;
         gameObject = p_gameObject;
         paint = p_paint;
-
-
     }
 
     public void SetText(String p_text)

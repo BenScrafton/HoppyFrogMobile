@@ -82,7 +82,7 @@ public class Frog extends GameObject
                     //position.x += collision.overlapDistance + 2;
                     break;
                 case BOTTOM:
-                    position.y += collision.overlapDistance -1;
+                    position.y += collision.overlapDistance - 0.1f;
                     this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
                     this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
                     this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
@@ -106,23 +106,13 @@ public class Frog extends GameObject
     }
 
     @Override
-    public void OnCollisionExit(CollisionSide side)
+    public void OnCollisionExit(GameObject otherCollider)
     {
-        super.OnCollisionExit(side);
+        super.OnCollisionExit(otherCollider);
 
-        switch (side)
+        if(otherCollider.tag == "LillyPad")
         {
-            case TOP:
-                break;
-            case RIGHT:
-                break;
-            case LEFT:
-                break;
-            case BOTTOM:
-                this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
-                break;
-            case NONE:
-                break;
+            this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
         }
     }
 

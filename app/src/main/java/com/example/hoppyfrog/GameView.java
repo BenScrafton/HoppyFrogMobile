@@ -2,65 +2,102 @@ package com.example.hoppyfrog;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
-public class GameView extends SurfaceView implements Runnable
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameView extends SurfaceView implements Runnable, View.OnTouchListener, GestureDetector.OnGestureListener
 {
     volatile boolean playing = true;
     Thread gameThread;
-
     float deltaTime;
 
     SurfaceHolder surfaceHolder;
     Canvas canvas = new Canvas();
+    public static Camera camera;
 
-    GameObject[] gameObjects = new GameObject[12];
+    List<List<GameObject>> layers = new ArrayList<>();
+    PadPlacer padPlacer;
+    MeteorManager meteorManager;
+    GameObject player;
 
     AccelerometerInput accelerometerInput;
-
-    Camera camera;
-    PadPlacer padPlacer;
-
-    GameObject background;
+    GestureDetector gestureDetector;
 
     public GameView(Context context)
     {
         super(context);
-
         surfaceHolder = getHolder();
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+        //-----------INPUT_EVENT_LISTENERS_SETUP-----------//
+        gestureDetector = new GestureDetector(context, this);
+        setOnTouchListener(this);
 
         accelerometerInput = new AccelerometerInput(context, this);
         accelerometerInput.Resume();
 
-        gameObjects[0] = new Frog(context);
+        //-----------------SETUP_LAYERS-----------------//
+        List<GameObject> uiObjects = new ArrayList<>();
+        List<GameObject> foregroundObjects = new ArrayList<>();
+        List<GameObject> midgroundObjects = new ArrayList<>();
+        List<GameObject> backgroundObjects = new ArrayList<>();
 
-        background = new Background(context);
-        padPlacer = new PadPlacer(context, gameObjects, new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);
-        gameObjects[11] = new Lava(context);
+        //---------SETUP_FOREGROUND---------//
+        player = new Frog(context);
+        foregroundObjects.add(player);//Player
+        meteorManager = new MeteorManager(context, foregroundObjects);
+        foregroundObjects.add(new Lava(context));//Lava
+        //---ADD_LAYER---//
 
-        camera = new Camera(gameObjects[0], gameObjects, 200.0f);
+        //---------------//
+
+        //---------SETUP_MIDGROUND---------//
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        padPlacer = new PadPlacer(context, midgroundObjects,
+                    new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);//LillyPads
+        //---ADD_LAYER---//
+
+        //---------------//
+
+        //---------SETUP_BACKGROUND---------//
+        backgroundObjects.add(new Background(context, camera));
+        //---ADD_LAYER---//
+
+        //---------------//
+
+        //---------SETUP_UI---------//
+        //---ADD_LAYER---//
+        Score score = new Score();
+        uiObjects.add(score);
+        //---------------//
+
+        //---------SETUP_LAYERS_LIST---------//
+        layers.add(backgroundObjects);
+        layers.add(midgroundObjects);
+        layers.add(foregroundObjects);
+        layers.add(uiObjects);
+
+        //-----------CAMERA_SETUP-----------//
+        camera = new Camera(player, layers, 200.0f);
     }
 
     public void SensorChanged(SensorEvent event)
     {
-        gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( event.values[0] * -100 ,gameObjects[0].<Movement>getComponentOfType("MOVEMENT").velocity.y);
+        Vector2 v = new Vector2(player.<Movement>getComponentOfType("MOVEMENT").velocity.x, player.<Movement>getComponentOfType("MOVEMENT").velocity.y);
+        player.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( (event.values[0] * -100), v.y);
     }
 
     public void resume()
@@ -68,7 +105,6 @@ public class GameView extends SurfaceView implements Runnable
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
-
         accelerometerInput.Resume();
     }
 
@@ -80,7 +116,6 @@ public class GameView extends SurfaceView implements Runnable
         } catch (InterruptedException e){
             Log.e("GameView", "Interrupted");
         }
-
         accelerometerInput.Pause();
     }
 
@@ -100,13 +135,15 @@ public class GameView extends SurfaceView implements Runnable
 
     void update()
     {
-        for(GameObject g : gameObjects)
+        for(List<GameObject> layer : layers)
         {
-            g.update();
+            for(GameObject gameObject : layer)
+            {
+                gameObject.update();
+            }
         }
-
         padPlacer.update();
-        background.update();
+        meteorManager.update();
     }
 
     void render()
@@ -116,34 +153,85 @@ public class GameView extends SurfaceView implements Runnable
             camera.update();
 
             canvas = surfaceHolder.lockCanvas();
-
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            background.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
 
-            for(GameObject g : gameObjects)
+            int layerIndex = 0;
+
+            for(List<GameObject> layer : layers)
             {
-                if(g != gameObjects[0])
+                for (GameObject gameObject : layer)
                 {
-                    g.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
+                    if(!gameObject.isActive)
+                    {
+                        continue;
+                    }
+
+                    if(gameObject.<Animator>getComponentOfType("ANIMATOR") != null)
+                    {
+                        gameObject.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
+                    }
+                    if(gameObject.<UItext>getComponentOfType("UI_TEXT") != null)
+                    {
+                        gameObject.<UItext>getComponentOfType("UI_TEXT").render(canvas);
+                    }
+
+                    //Paralax
+                    if(layerIndex == 0)
+                    {
+                        gameObject.position.x += camera.GetDeltaPos().x * 0.95f;
+                        gameObject.position.y += camera.GetDeltaPos().y * 0.95f;
+                    }
                 }
+                layerIndex++;
             }
-
-
-
-            gameObjects[0].<Animator>getComponentOfType("ANIMATOR").draw(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        switch (event.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:
-                ((Frog) gameObjects[0]).Jump();
-        }
+    //-----------------------GESTURES-----------------------//
 
-        return super.onTouchEvent(event);
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Log.d("Gestures", "onTouch");
+        gestureDetector.onTouchEvent(motionEvent);
+        return true;
+    }
+
+    @Override
+    public boolean onDown(@NonNull MotionEvent motionEvent) {
+
+        Log.d("Gestures", "onDown");
+        return false;
+    }
+
+    @Override
+    public void onShowPress(@NonNull MotionEvent motionEvent) {
+        Log.d("Gestures", "onShowPress");
+    }
+
+    @Override
+    public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
+        Log.d("Gestures", "onSingleTapUp");
+        ((Frog) player).Jump();
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+        Log.d("Gestures", "onScroll");
+
+        return false;
+    }
+
+    @Override
+    public void onLongPress(@NonNull MotionEvent motionEvent) {
+        Log.d("Gestures", "onLongPress");
+    }
+
+    @Override
+    public boolean onFling(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+        Log.d("Gestures", "onFling");
+        ((Frog) player).<Movement>getComponentOfType("MOVEMENT").Dodge(new Vector2(v, v1));
+        return false;
     }
 }

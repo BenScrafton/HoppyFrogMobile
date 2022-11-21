@@ -14,10 +14,9 @@ public class BoxCollider extends Component
     float scaleY;
     static List<BoxCollider> boxColliders = new ArrayList<BoxCollider>();
     public RectF lastBox;
-
-    CollisionData collisionData = new CollisionData(false, CollisionSide.NONE);
-
     boolean isStatic = false;
+
+    List<GameObject> curColliders = new ArrayList<GameObject>();
 
     BoxCollider(GameObject p_gameObject, float p_scaleX, float p_scaleY, boolean p_isStatic)
     {
@@ -64,22 +63,26 @@ public class BoxCollider extends Component
             return;
         }
 
+        boolean collidedAtAll = false;
         boolean collided = false;
+        int numCollisions = 0;
 
-        for(BoxCollider collider : boxColliders)
+        List<GameObject> tempCurColliders = new ArrayList<>();
+
+        for(BoxCollider collider : boxColliders) //On Collision Enter
         {
             collided = false;
+
             if (collider != this)
             {
                 if ((this.box.right >= collider.box.left) && (this.box.left <= collider.box.right) &&
                         (this.box.top <= collider.box.bottom) && (this.box.bottom >= collider.box.top))
                 {
+                    numCollisions++;
                     collided = true;
+                    collidedAtAll = true;
                 }
             }
-
-            collisionData.isColliding = false;
-
 
             if(collided)
             {
@@ -108,18 +111,28 @@ public class BoxCollider extends Component
                 }
 
                 Collision collision = new Collision(side, overlapDist, collider.gameObject);
-
-                collisionData.side = side;
-                collisionData.isColliding = true;
-
                 gameObject.OnCollision(collision);
 
-                lastBox.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scaleX, gameObject.position.y + scaleY);
+                if(!curColliders.contains(collider.gameObject))
+                {
+                    curColliders.add(collider.gameObject);
+                }
+
+                tempCurColliders.add(collider.gameObject);
             }
-            else
+        }
+
+        for(GameObject g : curColliders) //On Collision Exit
+        {
+            if(!tempCurColliders.contains(g))
             {
-                gameObject.OnCollisionExit(collisionData.side);
+                gameObject.OnCollisionExit(g);
             }
+        }
+
+        if(collidedAtAll)
+        {
+            lastBox.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scaleX, gameObject.position.y + scaleY);
         }
     }
 }

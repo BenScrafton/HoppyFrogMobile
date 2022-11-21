@@ -8,13 +8,16 @@ public class Background extends GameObject
     float animChangeTime = 0.07f * 28.0f;
     boolean animChanged = false;
 
-    public Background(Context context)
+    public Background(Context context, Camera camera)
     {
         position.y = 50;
+
+        //--------------------COMPONENT_SETUP--------------------//
+
+        //-----ANIMATOR_SETUP-----//
         Animation[] animations = new Animation[2];
         Animation start = new Animation(context, R.drawable.anim_volcano, 28,
                 90, 160, 200, 0.07f, true);
-
         Animation end = new Animation(context, R.drawable.anim_volcano2, 8,
                 90, 160, 200, 0.07f, false);
 

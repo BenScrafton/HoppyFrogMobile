@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PadPlacer
@@ -14,7 +15,7 @@ public class PadPlacer
 
     int frontIndex = 9;
 
-    public PadPlacer(Context context, GameObject[] p_gameObjects, Vector2 startPos, float p_minDisplacement, float p_maxDisplacement)
+    public PadPlacer(Context context, List<GameObject> p_gameObjects, Vector2 startPos, float p_minDisplacement, float p_maxDisplacement)
     {
         Vector2 curDisplacement = new Vector2(0,0);
         minDisplacement = p_minDisplacement;
@@ -29,7 +30,7 @@ public class PadPlacer
             }
 
             LillyPad l = new LillyPad(context, new Vector2(startPos.x + xDisplace, startPos.y + curDisplacement.y));
-            p_gameObjects[i] = l;
+            p_gameObjects.add(l);
 
             curDisplacement.y -= 500;
             lillyPads[i-1] = l;

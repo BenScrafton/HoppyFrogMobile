@@ -90,8 +90,6 @@ public class Animator extends Component
 
     public void draw(Canvas canvas)
     {
-        Log.e("Animation", currentFrame + " " + animationIndex);
-
         frameToDraw.left = currentFrame * animations[animationIndex].spriteWidth;
         frameToDraw.right = frameToDraw.left + animations[animationIndex].spriteWidth;
 

@@ -13,9 +13,15 @@ public class GameObject implements Observer
     Vector2 position = new Vector2(0,0);
     Vector2 scale = new Vector2(200, 200);
     ArrayList<Component> components  = new ArrayList<>();
+    boolean isActive = true;
 
     public void update()
     {
+        if(!isActive)
+        {
+            return;
+        }
+
         for(Component c : components)
         {
             c.update();
@@ -31,7 +37,6 @@ public class GameObject implements Observer
                 return (T) c;
             }
         }
-
         return null;
     }
 
@@ -49,9 +54,14 @@ public class GameObject implements Observer
 
     }
 
-    public void OnCollisionExit(CollisionSide side)
+    public void OnCollisionExit(GameObject otherCollider)
     {
 
+    }
+
+    public void SetIsActive(boolean state)
+    {
+        isActive = state;
     }
 
 }
