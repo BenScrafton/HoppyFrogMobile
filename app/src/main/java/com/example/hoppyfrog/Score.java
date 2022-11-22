@@ -5,10 +5,9 @@ import android.graphics.Paint;
 
 public class Score extends GameObject
 {
-    public Score()
+    public Score(GameObject recordObject)
     {
-        position = new Vector2(0,0);
-
+        position = new Vector2(10,100);
 
         //--------------------COMPONENT_SETUP--------------------//
 
@@ -20,6 +19,10 @@ public class Score extends GameObject
 
         UItext UI = new UItext(this, "Score: " ,paint);
         components.add(UI);
+
+        //-----VERTICAL_DISTACNCE_RECORD_SETUP-----//
+        VerticalDistanceRecorder recorder = new VerticalDistanceRecorder(this, recordObject);
+        components.add(recorder);
     }
 
     @Override

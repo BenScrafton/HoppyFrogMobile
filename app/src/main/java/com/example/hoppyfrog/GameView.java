@@ -29,6 +29,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     public static Camera camera;
 
     List<List<GameObject>> layers = new ArrayList<>();
+    List<GameObject> uiLayer = new ArrayList<>();
+
     PadPlacer padPlacer;
     MeteorManager meteorManager;
     GameObject player;
@@ -49,49 +51,40 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         accelerometerInput.Resume();
 
         //-----------------SETUP_LAYERS-----------------//
-        List<GameObject> uiObjects = new ArrayList<>();
         List<GameObject> foregroundObjects = new ArrayList<>();
         List<GameObject> midgroundObjects = new ArrayList<>();
         List<GameObject> backgroundObjects = new ArrayList<>();
 
         //---------SETUP_FOREGROUND---------//
+        foregroundObjects.add(new Lava(context));//Lava
+
         player = new Frog(context);
         foregroundObjects.add(player);//Player
-        meteorManager = new MeteorManager(context, foregroundObjects);
-        foregroundObjects.add(new Lava(context));//Lava
-        //---ADD_LAYER---//
 
-        //---------------//
+        meteorManager = new MeteorManager(context, foregroundObjects);//Meteors
 
         //---------SETUP_MIDGROUND---------//
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
         padPlacer = new PadPlacer(context, midgroundObjects,
                     new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);//LillyPads
-        //---ADD_LAYER---//
-
-        //---------------//
 
         //---------SETUP_BACKGROUND---------//
         backgroundObjects.add(new Background(context, camera));
-        //---ADD_LAYER---//
-
-        //---------------//
 
         //---------SETUP_UI---------//
-        //---ADD_LAYER---//
-        Score score = new Score();
-        uiObjects.add(score);
-        //---------------//
+        Score score = new Score(player);
+        uiLayer.add(score);
 
         //---------SETUP_LAYERS_LIST---------//
         layers.add(backgroundObjects);
         layers.add(midgroundObjects);
         layers.add(foregroundObjects);
-        layers.add(uiObjects);
 
         //-----------CAMERA_SETUP-----------//
-        camera = new Camera(player, layers, 200.0f);
+        //int ignoreLayers[1] = {0};
+
+        camera = new Camera(player, layers, 200.0f, ignoreLayers);
     }
 
     public void SensorChanged(SensorEvent event)
@@ -135,13 +128,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     void update()
     {
-        for(List<GameObject> layer : layers)
+        for(List<GameObject> layer : layers) // update main gameplay layers
         {
             for(GameObject gameObject : layer)
             {
                 gameObject.update();
             }
         }
+
+        for(GameObject uiElement : uiLayer)
+        {
+            uiElement.update();
+        }
+
         padPlacer.update();
         meteorManager.update();
     }
@@ -157,7 +156,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
             int layerIndex = 0;
 
-            for(List<GameObject> layer : layers)
+            for(List<GameObject> layer : layers) // render main gameplay layers
             {
                 for (GameObject gameObject : layer)
                 {
@@ -170,6 +169,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     {
                         gameObject.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
                     }
+
                     if(gameObject.<UItext>getComponentOfType("UI_TEXT") != null)
                     {
                         gameObject.<UItext>getComponentOfType("UI_TEXT").render(canvas);
@@ -178,11 +178,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     //Paralax
                     if(layerIndex == 0)
                     {
-                        gameObject.position.x += camera.GetDeltaPos().x * 0.95f;
-                        gameObject.position.y += camera.GetDeltaPos().y * 0.95f;
+                        //gameObject.position.x += camera.GetDeltaPos().x * 0.95f;
+                        //gameObject.position.y += camera.GetDeltaPos().y * 0.95f;
                     }
                 }
                 layerIndex++;
+            }
+
+            for(GameObject uiElement : uiLayer) // render ui layers
+            {
+                if(uiElement.<UItext>getComponentOfType("UI_TEXT") != null)
+                {
+                    uiElement.<UItext>getComponentOfType("UI_TEXT").render(canvas);
+                }
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

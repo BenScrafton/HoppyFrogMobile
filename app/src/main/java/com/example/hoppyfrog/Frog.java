@@ -100,6 +100,7 @@ public class Frog extends GameObject
                 Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
                 this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
+                this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
             }
         }
@@ -118,13 +119,16 @@ public class Frog extends GameObject
 
     public void Jump()
     {
-        if(numJumpsLeft > 0)
+        if(isAlive)
         {
-            this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
-            this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
-            this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+            if(numJumpsLeft > 0)
+            {
+                this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
+                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
+                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
 
-            numJumpsLeft--;
+                numJumpsLeft--;
+            }
         }
     }
 }
