@@ -12,11 +12,12 @@ public class PadPlacer
     LillyPad[] lillyPads = new LillyPad[10];
     float minDisplacement;
     float maxDisplacement;
-
+    Vector2 startPos;
     int frontIndex = 9;
 
-    public PadPlacer(Context context, List<GameObject> p_gameObjects, Vector2 startPos, float p_minDisplacement, float p_maxDisplacement)
+    public PadPlacer(Context context, List<GameObject> p_gameObjects, Vector2 p_startPos, float p_minDisplacement, float p_maxDisplacement)
     {
+        startPos = p_startPos;
         Vector2 curDisplacement = new Vector2(0,0);
         minDisplacement = p_minDisplacement;
         maxDisplacement = p_maxDisplacement;
@@ -47,6 +48,7 @@ public class PadPlacer
 
                 Log.e("HELL: ", "KILL ME");
                 l.position.y = lillyPads[frontIndex].position.y - 500;
+                l.position.x = startPos.x + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
                 //l.position.x =  (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
                 frontIndex = index;
             }

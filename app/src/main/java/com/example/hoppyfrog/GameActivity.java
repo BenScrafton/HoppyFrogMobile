@@ -9,12 +9,12 @@ import android.os.Bundle;
 public class GameActivity extends AppCompatActivity
 {
     GameView gameView;
-
+    AppCompatActivity appCompatActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        gameView = new GameView(this);
+        gameView = new GameView(this, this, this);
         setContentView(gameView);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
@@ -31,5 +31,10 @@ public class GameActivity extends AppCompatActivity
     {
         super.onPause();
         gameView.pause();
+    }
+
+    public void Restart()
+    {
+        App.Restart(this);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.hoppyfrog;
 
+import android.graphics.Canvas;
 import android.util.Log;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Camera
     Vector2 deltaPos;
     int[] ignoreLayers;
 
+    Canvas canvas;
 
     public Camera(GameObject p_followObject, List<List<GameObject>> p_layers, float p_moveSpeed, int[] p_ignoreLayers)
     {
@@ -47,6 +49,19 @@ public class Camera
                 if( object.<BoxCollider>getComponentOfType("BOXCOLLIDER") != null)
                 {
                     object.<BoxCollider>getComponentOfType("BOXCOLLIDER").AccountForCameraUpdate(deltaPos);
+                }
+            }
+
+            //for(GameObject object : layer)
+            {
+                //object.position.x -= deltaPos.x; /// (Math.abs(deltaPos.x)) * moveSpeed * Time.getInstance().deltaTime;
+                //object.position.y -= deltaPos.y; /// (Math.abs(deltaPos.y)) * moveSpeed * Time.getInstance().deltaTime;
+
+                //object.<Animator>getComponentOfType("ANIMATOR").draw();
+
+                //if( object.<BoxCollider>getComponentOfType("BOXCOLLIDER") != null)
+                {
+                    //object.<BoxCollider>getComponentOfType("BOXCOLLIDER").AccountForCameraUpdate(deltaPos);
                 }
             }
         }

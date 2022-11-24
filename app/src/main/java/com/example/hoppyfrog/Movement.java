@@ -1,5 +1,7 @@
 package com.example.hoppyfrog;
 
+import android.util.Log;
+
 public class Movement extends Component
 {
     GameObject gameObject;
@@ -33,9 +35,13 @@ public class Movement extends Component
                 velocity.x += 50000 * Time.getInstance().deltaTime * dodgeDirection;
             }
 
+
+
             gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
             gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
         }
+
+
 
         if(isDodging)
         {

@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +30,18 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     public static Camera camera;
 
     List<List<GameObject>> layers = new ArrayList<>();
-    List<GameObject> uiLayer = new ArrayList<>();
 
     PadPlacer padPlacer;
     MeteorManager meteorManager;
     GameObject player;
 
+    public static GameStateManager gameManager;
+
     AccelerometerInput accelerometerInput;
     GestureDetector gestureDetector;
 
-    public GameView(Context context)
+
+    public GameView(Context context, AppCompatActivity appCompatActivity, GameActivity gameActivity)
     {
         super(context);
         surfaceHolder = getHolder();
@@ -54,6 +57,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         List<GameObject> foregroundObjects = new ArrayList<>();
         List<GameObject> midgroundObjects = new ArrayList<>();
         List<GameObject> backgroundObjects = new ArrayList<>();
+        List<GameObject> uiObjects = new ArrayList<>();
 
         //---------SETUP_FOREGROUND---------//
         foregroundObjects.add(new Lava(context));//Lava
@@ -74,17 +78,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
         //---------SETUP_UI---------//
         Score score = new Score(player);
-        uiLayer.add(score);
+        uiObjects.add(score);
 
         //---------SETUP_LAYERS_LIST---------//
         layers.add(backgroundObjects);
         layers.add(midgroundObjects);
         layers.add(foregroundObjects);
+        layers.add(uiObjects);
 
         //-----------CAMERA_SETUP-----------//
-        //int ignoreLayers[1] = {0};
-
+        int ignoreLayers[] = {0,3};
         camera = new Camera(player, layers, 200.0f, ignoreLayers);
+
+        gameManager = new GameStateManager(appCompatActivity, gameActivity);
     }
 
     public void SensorChanged(SensorEvent event)
@@ -136,11 +142,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             }
         }
 
-        for(GameObject uiElement : uiLayer)
-        {
-            uiElement.update();
-        }
-
         padPlacer.update();
         meteorManager.update();
     }
@@ -183,14 +184,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     }
                 }
                 layerIndex++;
-            }
-
-            for(GameObject uiElement : uiLayer) // render ui layers
-            {
-                if(uiElement.<UItext>getComponentOfType("UI_TEXT") != null)
-                {
-                    uiElement.<UItext>getComponentOfType("UI_TEXT").render(canvas);
-                }
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }

@@ -1,5 +1,7 @@
 package com.example.hoppyfrog;
 
+import android.util.Log;
+
 public class VerticalDistanceRecorder extends Component
 {
     UItext uiText;
@@ -26,6 +28,8 @@ public class VerticalDistanceRecorder extends Component
     public void update()
     {
         super.update();
+
+        Log.e("V: ", Float.toString(movement.velocity.y));
 
         if(movement.lastMovement.y < 0.0f)
         {

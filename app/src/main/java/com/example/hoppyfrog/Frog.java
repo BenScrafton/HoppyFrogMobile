@@ -24,7 +24,7 @@ public class Frog extends GameObject
         //--------------------COMPONENT_SETUP--------------------//
 
         //-----ANIMATOR_SETUP-----//
-        Animation[] animations = new Animation[4];
+        Animation[] animations = new Animation[5];
 
         Animation idle = new Animation(context, R.drawable.anim_frog_idle, 2,
                 16, 16, 200, 0.5f, false);
@@ -34,11 +34,14 @@ public class Frog extends GameObject
                 16, 16, 200, 0.5f, true);
         Animation death = new Animation(context, R.drawable.anim_frog_death, 9,
                 16, 16, 200, 0.07f, true);
+        Animation squashed = new Animation(context, R.drawable.anim_frog_squashed, 18,
+                16, 16, 200, 0.025f, true);
 
         animations[0] = idle;
         animations[1] =  acending;
         animations[2] = landing;
         animations[3] = death;
+        animations[4] = squashed;
 
         Animator animator = new Animator(context, this, new Vector2(200, 200), animations);
         components.add(animator);
@@ -96,6 +99,8 @@ public class Frog extends GameObject
         {
             if(isAlive)
             {
+                //GameView.gameManager.SetGameState(GameState.BEGIN_PLAY);
+
                 isAlive = false;
                 Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
@@ -104,6 +109,19 @@ public class Frog extends GameObject
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
             }
         }
+        else if(collision.collider.tag == "Meteor")
+        {
+            if(isAlive)
+            {
+                isAlive = false;
+                Log.e("On Collision", "change anim");
+                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(4);
+                //this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
+                this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
+                this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+            }
+        }
+
     }
 
     @Override
