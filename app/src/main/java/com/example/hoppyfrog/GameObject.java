@@ -64,4 +64,9 @@ public class GameObject implements Observer
         isActive = state;
     }
 
+    public void Reset()
+    {
+
+    }
+
 }

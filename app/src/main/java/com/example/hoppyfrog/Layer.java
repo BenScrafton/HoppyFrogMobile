@@ -4,12 +4,14 @@ import java.util.List;
 
 public class Layer
 {
-    List<GameObject> gameObjects;
-    float paralaxFactor;
+    public List<GameObject> gameObjects;
+    //float paralaxFactor;
+    public boolean ignoreCameraTranslation;
 
-    public Layer(List<GameObject> p_gameObjects, float p_paralaxFactor)
+    public Layer(List<GameObject> p_gameObjects, boolean p_ignoreCameraTranslation)
     {
         gameObjects = p_gameObjects;
-        paralaxFactor = p_paralaxFactor;
+        ignoreCameraTranslation = p_ignoreCameraTranslation;
+        //paralaxFactor = p_paralaxFactor;
     }
 }

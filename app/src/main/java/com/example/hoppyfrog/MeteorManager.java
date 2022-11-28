@@ -34,6 +34,20 @@ public class MeteorManager
         ProcessActiveMeteors();
     }
 
+    public void Reset()
+    {
+        for(int i = active.size()-1; i > -1; i--)
+        {
+            Meteor m = active.get(i);
+
+            inActive.add(m);
+            active.remove(m);
+            m.position = new Vector2(10000000, 1000000);
+            m.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
+            m.isActive = false;
+        }
+    }
+
     void SendInActiveMeteors()
     {
         meteorTimer += Time.getInstance().deltaTime;
@@ -70,7 +84,8 @@ public class MeteorManager
         {
             Meteor m = inActive.get(0);
             m.SetIsActive(true);
-            m.position = new Vector2( 500 + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement),-1000);
+            m.position = new Vector2( 500 + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement),
+                                    GameView.mainCamera.position.y - 500.0f);
             inActive.remove(m);
             active.add(m);
         }

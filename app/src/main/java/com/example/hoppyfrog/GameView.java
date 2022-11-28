@@ -3,8 +3,6 @@ package com.example.hoppyfrog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.hardware.SensorEvent;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -27,19 +25,17 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     SurfaceHolder surfaceHolder;
     Canvas canvas = new Canvas();
-    public static Camera camera;
 
-    List<List<GameObject>> layers = new ArrayList<>();
-
-    PadPlacer padPlacer;
-    MeteorManager meteorManager;
-    GameObject player;
-
+    public static MainCamera mainCamera;
+    public static List<Layer> layers = new ArrayList<>();
+    public static PadPlacer padPlacer;
+    public static MeteorManager meteorManager;
     public static GameStateManager gameManager;
+
+    GameObject player;
 
     AccelerometerInput accelerometerInput;
     GestureDetector gestureDetector;
-
 
     public GameView(Context context, AppCompatActivity appCompatActivity, GameActivity gameActivity)
     {
@@ -59,8 +55,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         List<GameObject> backgroundObjects = new ArrayList<>();
         List<GameObject> uiObjects = new ArrayList<>();
 
+
         //---------SETUP_FOREGROUND---------//
-        foregroundObjects.add(new Lava(context));//Lava
+        Lava lava = new Lava(context);
+        foregroundObjects.add(lava);//Lava
 
         player = new Frog(context);
         foregroundObjects.add(player);//Player
@@ -74,29 +72,47 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     new Vector2((width / 2) - 100, height / 2 + 200), -500, 500);//LillyPads
 
         //---------SETUP_BACKGROUND---------//
-        backgroundObjects.add(new Background(context, camera));
+        Background background = new Background(context);
+        backgroundObjects.add(background);
 
         //---------SETUP_UI---------//
-        Score score = new Score(player);
+        HighScoreUI highScoreUI = new HighScoreUI(context);
+        uiObjects.add(highScoreUI);
+
+        ScoreUI score = new ScoreUI(player, context, highScoreUI);
         uiObjects.add(score);
 
+        SplashScreen splashScreen = new SplashScreen(context);
+        uiObjects.add(splashScreen);
+
+        GameOverUI gameOverUI = new GameOverUI(context);
+        uiObjects.add(gameOverUI);
+
+        HUD hud = new HUD(context);
+        uiObjects.add(hud);
+
         //---------SETUP_LAYERS_LIST---------//
-        layers.add(backgroundObjects);
-        layers.add(midgroundObjects);
-        layers.add(foregroundObjects);
-        layers.add(uiObjects);
+        layers.add(new Layer(backgroundObjects, true));
+        layers.add(new Layer(midgroundObjects, false));
+        layers.add(new Layer(foregroundObjects, false));
+        layers.add(new Layer(uiObjects, true));
 
         //-----------CAMERA_SETUP-----------//
         int ignoreLayers[] = {0,3};
-        camera = new Camera(player, layers, 200.0f, ignoreLayers);
+        mainCamera = new MainCamera(player);
+        gameManager = new GameStateManager(appCompatActivity, gameActivity, lava,
+                                            splashScreen, background, gameOverUI, highScoreUI,
+                                            hud, score);
 
-        gameManager = new GameStateManager(appCompatActivity, gameActivity);
     }
 
     public void SensorChanged(SensorEvent event)
     {
-        Vector2 v = new Vector2(player.<Movement>getComponentOfType("MOVEMENT").velocity.x, player.<Movement>getComponentOfType("MOVEMENT").velocity.y);
-        player.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( (event.values[0] * -100), v.y);
+        if(((Frog)player).isAlive && gameManager.gameState != GameState.BEGIN_PLAY)
+        {
+            Vector2 v = new Vector2(player.<Movement>getComponentOfType("MOVEMENT").velocity.x, player.<Movement>getComponentOfType("MOVEMENT").velocity.y);
+            player.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( (event.values[0] * -100), v.y);
+        }
     }
 
     public void resume()
@@ -134,57 +150,29 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     void update()
     {
-        for(List<GameObject> layer : layers) // update main gameplay layers
+        for(Layer layer : layers) // update main gameplay layers
         {
-            for(GameObject gameObject : layer)
+            for(GameObject gameObject : layer.gameObjects)
             {
                 gameObject.update();
             }
         }
 
-        padPlacer.update();
-        meteorManager.update();
+        if(gameManager.GetGameState() == GameState.PLAYING)
+        {
+            padPlacer.update();
+            meteorManager.update();
+            mainCamera.update();
+        }
     }
 
     void render()
     {
         if(surfaceHolder.getSurface().isValid())
         {
-            camera.update();
-
             canvas = surfaceHolder.lockCanvas();
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            mainCamera.<Camera>getComponentOfType("CAMERA").render(canvas);
 
-            int layerIndex = 0;
-
-            for(List<GameObject> layer : layers) // render main gameplay layers
-            {
-                for (GameObject gameObject : layer)
-                {
-                    if(!gameObject.isActive)
-                    {
-                        continue;
-                    }
-
-                    if(gameObject.<Animator>getComponentOfType("ANIMATOR") != null)
-                    {
-                        gameObject.<Animator>getComponentOfType("ANIMATOR").draw(canvas);
-                    }
-
-                    if(gameObject.<UItext>getComponentOfType("UI_TEXT") != null)
-                    {
-                        gameObject.<UItext>getComponentOfType("UI_TEXT").render(canvas);
-                    }
-
-                    //Paralax
-                    if(layerIndex == 0)
-                    {
-                        //gameObject.position.x += camera.GetDeltaPos().x * 0.95f;
-                        //gameObject.position.y += camera.GetDeltaPos().y * 0.95f;
-                    }
-                }
-                layerIndex++;
-            }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -213,7 +201,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
         Log.d("Gestures", "onSingleTapUp");
-        ((Frog) player).Jump();
+
+        switch (gameManager.GetGameState())
+        {
+            case BEGIN_PLAY:
+                gameManager.SetGameState(GameState.PLAYING);
+                break;
+            case PLAYING:
+                ((Frog) player).Jump();
+                break;
+            case GAMEOVER:
+                gameManager.SetGameState(GameState.BEGIN_PLAY);
+                break;
+        }
         return false;
     }
 
@@ -232,7 +232,17 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onFling(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
         Log.d("Gestures", "onFling");
-        ((Frog) player).<Movement>getComponentOfType("MOVEMENT").Dodge(new Vector2(v, v1));
+
+        switch (gameManager.GetGameState())
+        {
+            case BEGIN_PLAY:
+                break;
+            case PLAYING:
+                ((Frog) player).<Movement>getComponentOfType("MOVEMENT").Dodge(new Vector2(v, v1));
+                break;
+            case GAMEOVER:
+                break;
+        }
         return false;
     }
 }

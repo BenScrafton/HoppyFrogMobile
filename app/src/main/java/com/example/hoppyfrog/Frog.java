@@ -9,9 +9,15 @@ import android.util.Log;
 
 public class Frog extends GameObject
 {
+    //Components
+    Animator animator;
+    Movement movement;
+    Gravity gravity;
+    BoxCollider collider;
+
     int numJumps = 2;
     int numJumpsLeft = 2;
-    boolean isAlive = true;
+    public boolean isAlive = true;
     LavaSplash lavaSplash;
 
     public Frog(Context context)
@@ -43,20 +49,20 @@ public class Frog extends GameObject
         animations[3] = death;
         animations[4] = squashed;
 
-        Animator animator = new Animator(context, this, new Vector2(200, 200), animations);
+        animator = new Animator(context, this, new Vector2(200, 200), animations);
         components.add(animator);
 
         //-----MOVEMENT_SETUP-----//
-        Movement movement = new Movement(this);
+        movement = new Movement(this);
         components.add(movement);
 
         //-----GRAVITY_SETUP-----//
         Vector2 g = new Vector2(0, -500.0f);
-        Gravity gravity = new Gravity(this, g);
+        gravity = new Gravity(this, g);
         components.add(gravity);
 
         //-----BOXCOLLIDER_SETUP-----//
-        BoxCollider collider = new BoxCollider(this, 200, 200, false);
+        collider = new BoxCollider(this, 200, 200, false);
         components.add(collider);
     }
 
@@ -92,6 +98,8 @@ public class Frog extends GameObject
                     this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
 
                     numJumpsLeft = numJumps;
+
+                    Log.e("YO", "WHY");
                     break;
             }
         }
@@ -99,12 +107,11 @@ public class Frog extends GameObject
         {
             if(isAlive)
             {
-                //GameView.gameManager.SetGameState(GameState.BEGIN_PLAY);
-
                 isAlive = false;
+                GameView.gameManager.SetGameState(GameState.GAMEOVER);
                 Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
-                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
+                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
                 this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
             }
@@ -114,9 +121,10 @@ public class Frog extends GameObject
             if(isAlive)
             {
                 isAlive = false;
+                GameView.gameManager.SetGameState(GameState.GAMEOVER);
                 Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(4);
-                //this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, -20);
+                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
                 this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
             }
@@ -148,5 +156,23 @@ public class Frog extends GameObject
                 numJumpsLeft--;
             }
         }
+    }
+
+    @Override
+    public void Reset()
+    {
+        super.Reset();
+
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        position = new Vector2((width / 2) - 101, height / 2);
+        collider.UpdateBounds();
+        movement.velocity = new Vector2(0,0);
+        gravity.SetGrounded(true);
+        animator.changeAnimation(0);
+        isAlive = true;
+
+        this.<Movement>getComponentOfType("MOVEMENT").isActive = true;
+        this.<Gravity>getComponentOfType("GRAVITY").isActive = true;
     }
 }

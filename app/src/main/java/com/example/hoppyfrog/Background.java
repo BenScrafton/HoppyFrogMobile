@@ -8,9 +8,9 @@ public class Background extends GameObject
     float animChangeTime = 0.07f * 28.0f;
     boolean animChanged = false;
 
-    public Background(Context context, Camera camera)
+    public Background(Context context)
     {
-        position.y = 50;
+        position.y = 245;
 
         //--------------------COMPONENT_SETUP--------------------//
 
@@ -31,16 +31,19 @@ public class Background extends GameObject
     public void update() {
         super.update();
 
-        if(!animChanged)
+        if(GameStateManager.gameState == GameState.PLAYING)
         {
-            timer += Time.getInstance().deltaTime;
-        }
+            if(!animChanged)
+            {
+                timer += Time.getInstance().deltaTime;
+            }
 
-        if(timer >= animChangeTime)
-        {
-            this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
-            animChanged = true;
-            timer = 0.0f;
+            if(timer >= 2)
+            {
+                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+                animChanged = true;
+                timer = 0.0f;
+            }
         }
     }
 }

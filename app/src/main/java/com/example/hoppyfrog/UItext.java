@@ -6,15 +6,17 @@ import android.graphics.Paint;
 
 public class UItext extends Component
 {
+    Vector2 position;
     Paint paint;
     String text;
 
-    UItext(GameObject p_gameObject, String p_text, Paint p_paint)
+    UItext(GameObject p_gameObject, String p_text, Paint p_paint, Vector2 p_position)
     {
         id = "UI_TEXT";
         text = p_text;
         gameObject = p_gameObject;
         paint = p_paint;
+        position = p_position;
     }
 
     public void SetText(String p_text)
@@ -27,9 +29,14 @@ public class UItext extends Component
         paint = p_paint;
     }
 
+    public void SetPosition(Vector2 p_position)
+    {
+        position = p_position;
+    }
+
     public void render(Canvas canvas)
     {
-        canvas.drawText(text, 0, text.length(), gameObject.position.x, gameObject.position.y, paint);
+        canvas.drawText(text, 0, text.length(), position.x, position.y, paint);
     }
 }
 

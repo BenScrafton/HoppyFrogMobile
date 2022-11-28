@@ -88,12 +88,13 @@ public class Animator extends Component
         animationIndex = index;
     }
 
-    public void draw(Canvas canvas)
+    public void draw(Canvas canvas, Vector2 cameraOffset)
     {
         frameToDraw.left = currentFrame * animations[animationIndex].spriteWidth;
         frameToDraw.right = frameToDraw.left + animations[animationIndex].spriteWidth;
 
-        whereToDraw.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scale.x, gameObject.position.y + scale.y);
+        whereToDraw.set((gameObject.position.x + cameraOffset.x), (gameObject.position.y + cameraOffset.y),
+                        (gameObject.position.x + cameraOffset.x + scale.x), (gameObject.position.y + cameraOffset.y + scale.y));
         canvas.drawBitmap(animations[animationIndex].spriteSheet, frameToDraw, whereToDraw, null);
     }
 }

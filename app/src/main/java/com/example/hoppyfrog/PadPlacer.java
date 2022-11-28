@@ -38,6 +38,27 @@ public class PadPlacer
         }
     }
 
+    public void Reset()
+    {
+        Vector2 curDisplacement = new Vector2(0,0);
+
+        int index = 0;
+        for (LillyPad l : lillyPads)
+        {
+            float xDisplace = 0;
+            if(index != 0)
+            {
+                xDisplace = (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
+            }
+
+            l.position = new Vector2(startPos.x + xDisplace, startPos.y + curDisplacement.y);
+            l.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
+
+            curDisplacement.y -= 500;
+            index++;
+        }
+    }
+
     public void update()
     {
         int index = 0;
@@ -45,7 +66,6 @@ public class PadPlacer
         {
             if(l.position.y > 5000)
             {
-
                 Log.e("HELL: ", "KILL ME");
                 l.position.y = lillyPads[frontIndex].position.y - 500;
                 l.position.x = startPos.x + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);

@@ -4,10 +4,14 @@ import android.content.Context;
 
 public class Lava extends GameObject
 {
+    Animator animator;
+    Movement movement;
+    BoxCollider collider;
+
     public Lava(Context context)
     {
         tag = "Lava";
-        position = new Vector2(-4000, 2200);
+        position = new Vector2(-4000, 2500);
 
         //--------------------COMPONENT_SETUP--------------------//
 
@@ -16,16 +20,17 @@ public class Lava extends GameObject
         Animation idle = new Animation(context, R.drawable.lava, 1,
                 90, 160, 200, 0.5f, false);
         animations[0] = idle;
-        Animator animator = new Animator(context, this, new Vector2(10000, 10000), animations);
+        animator = new Animator(context, this, new Vector2(10000, 10000), animations);
         components.add(animator);
 
+
         //-----MOVEMENT_SETUP-----//
-        Movement movement = new Movement(this);
+        movement = new Movement(this);
         components.add(movement);
         movement.velocity = new Vector2(0, 100);
 
         //-----BOXCOLLIDER_SETUP-----//
-        BoxCollider collider = new BoxCollider(this, 10000, 10000, false);
+        collider = new BoxCollider(this, 10000, 10000, false);
         components.add(collider);
     }
 
@@ -33,5 +38,13 @@ public class Lava extends GameObject
     public void update()
     {
         super.update();
+    }
+
+    @Override
+    public void Reset()
+    {
+        super.Reset();
+        position = new Vector2(-4000, 2500);
+        collider.UpdateBounds();
     }
 }

@@ -1,87 +1,56 @@
 package com.example.hoppyfrog;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 
 import java.util.List;
 
-public class Camera
+public class Camera extends Component
 {
-    //List<Layer> layers;
-    List<List<GameObject>> layers;
-    GameObject followObject;
-    Vector2 lastPos;
-    float moveSpeed;
-    Vector2 deltaPos;
-    int[] ignoreLayers;
+    int ignoreTranslation[];
 
-    Canvas canvas;
-
-    public Camera(GameObject p_followObject, List<List<GameObject>> p_layers, float p_moveSpeed, int[] p_ignoreLayers)
+    public Camera(GameObject p_gameObject)
     {
-        followObject = p_followObject;
-        layers = p_layers;
-        moveSpeed = p_moveSpeed;
-        lastPos = new Vector2(followObject.position.x , followObject.position.y);
-        ignoreLayers = p_ignoreLayers;
+        id = "CAMERA";
+        gameObject = p_gameObject;
     }
 
-    public void update()
+    public void render(Canvas canvas)
     {
-        deltaPos = new Vector2(followObject.position.x - lastPos.x,
-                                        followObject.position.y - lastPos.y);
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
-        int curLayer = -1;
+        Log.e("RENDERME", Integer.toString(GameView.layers.size()));
 
-        for(List<GameObject> layer : layers)
+
+
+        for(Layer layer : GameView.layers)
         {
-            curLayer++;
-            if(CheckIgnoreLayer(curLayer))
+            Vector2 offset = new Vector2(-1 * gameObject.position.x, -1 * gameObject.position.y);
+            if(layer.ignoreCameraTranslation)
             {
-                continue;
+                offset = new Vector2(0,0);
             }
 
-            for(GameObject object : layer)
+            for(GameObject g : layer.gameObjects)
             {
-                object.position.x -= deltaPos.x; /// (Math.abs(deltaPos.x)) * moveSpeed * Time.getInstance().deltaTime;
-                object.position.y -= deltaPos.y; /// (Math.abs(deltaPos.y)) * moveSpeed * Time.getInstance().deltaTime;
-
-                if( object.<BoxCollider>getComponentOfType("BOXCOLLIDER") != null)
+                if(!g.isActive)
                 {
-                    object.<BoxCollider>getComponentOfType("BOXCOLLIDER").AccountForCameraUpdate(deltaPos);
+                    continue;
                 }
-            }
 
-            //for(GameObject object : layer)
-            {
-                //object.position.x -= deltaPos.x; /// (Math.abs(deltaPos.x)) * moveSpeed * Time.getInstance().deltaTime;
-                //object.position.y -= deltaPos.y; /// (Math.abs(deltaPos.y)) * moveSpeed * Time.getInstance().deltaTime;
-
-                //object.<Animator>getComponentOfType("ANIMATOR").draw();
-
-                //if( object.<BoxCollider>getComponentOfType("BOXCOLLIDER") != null)
+                if(g.<Animator>getComponentOfType("ANIMATOR") != null)
                 {
-                    //object.<BoxCollider>getComponentOfType("BOXCOLLIDER").AccountForCameraUpdate(deltaPos);
+                    Log.e("RENDERME2", Integer.toString(layer.gameObjects.size()));
+                    g.<Animator>getComponentOfType("ANIMATOR").draw(canvas, offset);
+                }
+
+                if(g.<UItext>getComponentOfType("UI_TEXT") != null)
+                {
+                    g.<UItext>getComponentOfType("UI_TEXT").render(canvas);
                 }
             }
         }
-        lastPos = new Vector2(followObject.position.x , followObject.position.y);
-    }
-
-    public boolean CheckIgnoreLayer(int index)
-    {
-        for(int ignoreIndex : ignoreLayers)
-        {
-            if(ignoreIndex == index)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Vector2 GetDeltaPos()
-    {
-        return deltaPos;
     }
 }
