@@ -5,16 +5,15 @@ import android.util.Log;
 public class FollowGameObject extends Component
 {
     GameObject followObject;
-    Movement followMovement;
-    Movement ourMovement;
-
+    Vector2 lastPos;
+    Vector2 offset = new Vector2(0,0);
     public FollowGameObject(GameObject p_gameObject, GameObject p_followObject)
     {
         id = "FOLLOW_GAME_OBJECT";
         gameObject = p_gameObject;
         followObject = p_followObject;
-        followMovement = followObject.<Movement>getComponentOfType("MOVEMENT");
-        ourMovement = gameObject.<Movement>getComponentOfType("MOVEMENT");
+        offset.x = followObject.position.x - gameObject.position.x;
+        offset.y = followObject.position.y - gameObject.position.y;
     }
 
     @Override
@@ -22,20 +21,8 @@ public class FollowGameObject extends Component
     {
         super.update();
 
-        if(followMovement != null)
-        {
-            if(ourMovement != null)
-            {
-                ourMovement.velocity = followMovement.velocity;
-            }
-            else
-            {
-                Log.e("FollowGameObject", "Can't follow object without Movement component on this gameObject");
-            }
-        }
-        else
-        {
-            Log.e("FollowGameObject", "Can't follow object without Movement component on follow gameObject");
-        }
+        gameObject.position.x = followObject.position.x - offset.x;
+        gameObject.position.y = followObject.position.y - offset.y;
+
     }
 }

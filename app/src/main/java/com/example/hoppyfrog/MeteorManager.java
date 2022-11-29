@@ -44,6 +44,7 @@ public class MeteorManager
             active.remove(m);
             m.position = new Vector2(10000000, 1000000);
             m.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
+            m.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0,0);
             m.isActive = false;
         }
     }
@@ -85,7 +86,7 @@ public class MeteorManager
             Meteor m = inActive.get(0);
             m.SetIsActive(true);
             m.position = new Vector2( 500 + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement),
-                                    GameView.mainCamera.position.y - 500.0f);
+                                    GameView.mainCamera.position.y - 1000.0f);
             inActive.remove(m);
             active.add(m);
         }

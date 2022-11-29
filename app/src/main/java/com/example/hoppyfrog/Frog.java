@@ -165,10 +165,10 @@ public class Frog extends GameObject
 
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-        position = new Vector2((width / 2) - 101, height / 2);
+        position = new Vector2((width / 2) - 100, (height / 2) - 1);
         collider.UpdateBounds();
         movement.velocity = new Vector2(0,0);
-        gravity.SetGrounded(true);
+        //gravity.SetGrounded(true);
         animator.changeAnimation(0);
         isAlive = true;
 

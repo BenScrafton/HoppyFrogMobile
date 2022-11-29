@@ -57,6 +57,8 @@ public class PadPlacer
             curDisplacement.y -= 500;
             index++;
         }
+
+        frontIndex = lillyPads.length - 1;
     }
 
     public void update()
@@ -64,9 +66,12 @@ public class PadPlacer
         int index = 0;
         for (LillyPad l : lillyPads)
         {
-            if(l.position.y > 5000)
+            float distFromCamera = l.position.y - GameView.mainCamera.position.y;
+
+            if(distFromCamera > 3000)
             {
-                Log.e("HELL: ", "KILL ME");
+                Log.e("PLACE", "Place");
+
                 l.position.y = lillyPads[frontIndex].position.y - 500;
                 l.position.x = startPos.x + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
                 //l.position.x =  (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);

@@ -7,6 +7,7 @@ public class Background extends GameObject
     float timer = 0.0f;
     float animChangeTime = 0.07f * 28.0f;
     boolean animChanged = false;
+    Animator animator;
 
     public Background(Context context)
     {
@@ -23,7 +24,7 @@ public class Background extends GameObject
 
         animations[0] = start;
         animations[1] = end;
-        Animator animator = new Animator(context, this, new Vector2(1080, 1920), animations);
+        animator = new Animator(context, this, new Vector2(1080, 1920), animations);
         components.add(animator);
     }
 
@@ -45,5 +46,13 @@ public class Background extends GameObject
                 timer = 0.0f;
             }
         }
+    }
+
+    @Override
+    public void Reset() {
+        super.Reset();
+        animator.changeAnimation(0);
+        timer = 0;
+        animChanged = false;
     }
 }

@@ -23,8 +23,6 @@ public class Camera extends Component
 
         Log.e("RENDERME", Integer.toString(GameView.layers.size()));
 
-
-
         for(Layer layer : GameView.layers)
         {
             Vector2 offset = new Vector2(-1 * gameObject.position.x, -1 * gameObject.position.y);
