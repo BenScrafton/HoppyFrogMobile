@@ -2,9 +2,6 @@ package com.example.hoppyfrog;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.os.Debug;
 import android.util.Log;
 
 public class Frog extends GameObject
@@ -14,6 +11,8 @@ public class Frog extends GameObject
     Movement movement;
     Gravity gravity;
     BoxCollider collider;
+
+    AudioSource audioSource;
 
     int numJumps = 2;
     int numJumpsLeft = 2;
@@ -64,6 +63,12 @@ public class Frog extends GameObject
         //-----BOXCOLLIDER_SETUP-----//
         collider = new BoxCollider(this, 200, 200, false);
         components.add(collider);
+
+        //-----AUDIO_SOURCE_SETUP-----//
+        audioSource = new AudioSource(this);
+        audioSource.LoadSoundPoolFile(R.raw.boing); //index: 0
+        audioSource.LoadSoundPoolFile(R.raw.burn); //        1
+        audioSource.LoadSoundPoolFile(R.raw.swipe);//       2
     }
 
     @Override
@@ -114,6 +119,7 @@ public class Frog extends GameObject
                 this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
                 this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+                audioSource.PlaySound(1);
             }
         }
         else if(collision.collider.tag == "Meteor")
@@ -127,6 +133,7 @@ public class Frog extends GameObject
                 this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
                 this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
                 this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+                audioSource.PlaySound(1);
             }
         }
 
@@ -154,8 +161,15 @@ public class Frog extends GameObject
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
 
                 numJumpsLeft--;
+                audioSource.PlaySound(0);
             }
         }
+    }
+
+    public void Dodge(Vector2 swipe)
+    {
+        movement.Dodge(swipe);
+        audioSource.PlaySound(2);
     }
 
     @Override
@@ -172,6 +186,7 @@ public class Frog extends GameObject
         animator.changeAnimation(0);
         isAlive = true;
 
+        audioSource.StopSound();
         this.<Movement>getComponentOfType("MOVEMENT").isActive = true;
         this.<Gravity>getComponentOfType("GRAVITY").isActive = true;
     }

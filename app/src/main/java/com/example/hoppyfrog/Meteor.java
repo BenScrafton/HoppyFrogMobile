@@ -4,6 +4,8 @@ import android.content.Context;
 
 public class Meteor extends GameObject
 {
+    AudioSource audioSource;
+
     public Meteor(Context context, Vector2 p_position)
     {
         tag = "Meteor";
@@ -31,6 +33,10 @@ public class Meteor extends GameObject
         //-----BOXCOLLIDER_SETUP-----//
         BoxCollider collider = new BoxCollider(this, 200, 400, true);
         components.add(collider);
+
+        //-----AUDIO_SOURCE_SETUP-----//
+        audioSource = new AudioSource(this);
+        audioSource.LoadSoundPoolFile(R.raw.whistle);
     }
 
 }

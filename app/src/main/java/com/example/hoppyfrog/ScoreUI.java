@@ -3,9 +3,12 @@ package com.example.hoppyfrog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 
 public class ScoreUI extends GameObject
 {
+    VerticalDistanceRecorder recorder;
+
     public ScoreUI(GameObject recordObject, Context context, HighScoreUI highScoreUI)
     {
         position = new Vector2(550,240);
@@ -18,11 +21,14 @@ public class ScoreUI extends GameObject
         paint.setStyle(Paint.Style.FILL);
         paint.setTextSize(170.0f);
 
+        //Typeface tf = Typeface.createFromAsset(context.getAssets(), "font/press_start_2.ttf");
+        //paint.setTypeface(tf);
+
         UItext UI = new UItext(this, "Score: " ,paint, position);
         components.add(UI);
 
         //-----VERTICAL_DISTACNCE_RECORD_SETUP-----//
-        VerticalDistanceRecorder recorder = new VerticalDistanceRecorder(this, recordObject, highScoreUI);
+        recorder = new VerticalDistanceRecorder(this, recordObject, highScoreUI);
         components.add(recorder);
     }
 
@@ -34,6 +40,7 @@ public class ScoreUI extends GameObject
     public void Reset()
     {
         this.<UItext>getComponentOfType("UI_TEXT").SetPosition(new Vector2(550, 210));
+        recorder.updatedHighScore = false;
     }
 
     @Override

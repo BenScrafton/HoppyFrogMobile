@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.hardware.SensorEvent;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -36,11 +37,17 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     AccelerometerInput accelerometerInput;
     GestureDetector gestureDetector;
+    public static SoundManager soundManager;
+    //MediaPlayer mediaPlayer;
+    Context context;
 
-    public GameView(Context context, AppCompatActivity appCompatActivity, GameActivity gameActivity)
+    public GameView(Context p_context, AppCompatActivity appCompatActivity, GameActivity gameActivity)
     {
-        super(context);
+        super(p_context);
+
+        context = p_context;
         surfaceHolder = getHolder();
+        soundManager = new SoundManager(context);
 
         //-----------INPUT_EVENT_LISTENERS_SETUP-----------//
         gestureDetector = new GestureDetector(context, this);
@@ -54,7 +61,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         List<GameObject> midgroundObjects = new ArrayList<>();
         List<GameObject> backgroundObjects = new ArrayList<>();
         List<GameObject> uiObjects = new ArrayList<>();
-
 
         //---------SETUP_FOREGROUND---------//
         Lava lava = new Lava(context);
@@ -103,7 +109,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gameManager = new GameStateManager(appCompatActivity, gameActivity, lava,
                                             splashScreen, background, gameOverUI, highScoreUI,
                                             hud, score);
-
     }
 
     public void SensorChanged(SensorEvent event)
@@ -121,6 +126,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gameThread = new Thread(this);
         gameThread.start();
         accelerometerInput.Resume();
+        //soundManager.PlayMediaPlayers();
     }
 
     public void pause()
@@ -132,6 +138,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             Log.e("GameView", "Interrupted");
         }
         accelerometerInput.Pause();
+        soundManager.PauseMediaPlayers();
     }
 
     public void run()
@@ -238,7 +245,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             case BEGIN_PLAY:
                 break;
             case PLAYING:
-                ((Frog) player).<Movement>getComponentOfType("MOVEMENT").Dodge(new Vector2(v, v1));
+                ((Frog) player).Dodge(new Vector2(v, v1));
                 break;
             case GAMEOVER:
                 break;

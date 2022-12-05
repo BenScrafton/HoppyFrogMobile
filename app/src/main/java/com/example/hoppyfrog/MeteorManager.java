@@ -13,7 +13,7 @@ public class MeteorManager
     List<Meteor> inActive = new ArrayList<>();
 
     float meteorTimer = 0.0f;
-    float meteorCooldown = 3.0f;
+    float meteorCooldown = 6.0f;
     float maxDisplacement = 500;
     float minDisplacement = -500;
 
@@ -89,6 +89,7 @@ public class MeteorManager
                                     GameView.mainCamera.position.y - 1000.0f);
             inActive.remove(m);
             active.add(m);
+            m.audioSource.PlaySound(0);
         }
     }
 }
