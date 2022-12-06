@@ -36,19 +36,14 @@ public class VerticalDistanceRecorder extends Component
 
         Log.e("V: ", Float.toString(movement.velocity.y));
 
-        //if(movement.lastMovement.y < 0.0f)
+        distanceTravelledUp = (startPositionY - recordObject.position.y) / 100;
+
+        if( distanceTravelledUp < 0)
         {
-            //distanceTravelledUp += Math.abs(movement.lastMovement.y);
-
-
-            distanceTravelledUp = startPositionY - recordObject.position.y;
-
-            if( distanceTravelledUp < 0)
-            {
-                distanceTravelledUp = 0;
-            }
-            uiText.text = Integer.toString((int)distanceTravelledUp);
+            distanceTravelledUp = 0;
         }
+        uiText.text = Integer.toString((int)distanceTravelledUp);
+
 
         if(GameView.gameManager.GetGameState() == GameState.GAMEOVER && !updatedHighScore)
         {

@@ -126,7 +126,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gameThread = new Thread(this);
         gameThread.start();
         accelerometerInput.Resume();
-        //soundManager.PlayMediaPlayers();
     }
 
     public void pause()
@@ -227,7 +226,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onScroll(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
         Log.d("Gestures", "onScroll");
-
         return false;
     }
 

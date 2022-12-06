@@ -21,8 +21,6 @@ public class Camera extends Component
     {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
-        Log.e("RENDERME", Integer.toString(GameView.layers.size()));
-
         for(Layer layer : GameView.layers)
         {
             Vector2 offset = new Vector2(-1 * gameObject.position.x, -1 * gameObject.position.y);
@@ -40,7 +38,6 @@ public class Camera extends Component
 
                 if(g.<Animator>getComponentOfType("ANIMATOR") != null)
                 {
-                    Log.e("RENDERME2", Integer.toString(layer.gameObjects.size()));
                     g.<Animator>getComponentOfType("ANIMATOR").draw(canvas, offset);
                 }
 

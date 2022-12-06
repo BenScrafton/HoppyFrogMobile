@@ -103,8 +103,6 @@ public class Frog extends GameObject
                     this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
 
                     numJumpsLeft = numJumps;
-
-                    Log.e("YO", "WHY");
                     break;
             }
         }
@@ -136,7 +134,6 @@ public class Frog extends GameObject
                 audioSource.PlaySound(1);
             }
         }
-
     }
 
     @Override
