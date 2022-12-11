@@ -11,7 +11,6 @@ public class GameObject implements Observer
 {
     String tag = "";
     Vector2 position = new Vector2(0,0);
-    Vector2 scale = new Vector2(200, 200);
     ArrayList<Component> components  = new ArrayList<>();
     boolean isActive = true;
 
@@ -49,24 +48,14 @@ public class GameObject implements Observer
         }
     }
 
-    public void OnCollision(Collision collision)
-    {
+    public void OnCollision(Collision collision) {}
 
-    }
-
-    public void OnCollisionExit(GameObject otherCollider)
-    {
-
-    }
+    public void OnCollisionExit(GameObject otherCollider) {}
 
     public void SetIsActive(boolean state)
     {
         isActive = state;
     }
 
-    public void Reset()
-    {
-
-    }
-
+    public void Reset() {}
 }

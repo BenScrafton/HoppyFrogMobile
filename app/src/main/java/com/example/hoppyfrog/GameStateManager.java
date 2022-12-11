@@ -12,17 +12,17 @@ enum GameState
 public class GameStateManager
 {
     public static  GameState gameState = GameState.PLAYING;
-    AppCompatActivity appCompatActivity;
-    GameActivity gameActivity;
-    Lava lava;
-    Movement lavaMovement;
-    SplashScreen splashScreen;
-    Animator backgroundAnimator;
-    GameOverUI gameOverUI;
-    static GameStateManager instance;
-    HighScoreUI highScoreUI;
-    HUD hud;
-    ScoreUI scoreUI;
+    private AppCompatActivity appCompatActivity;
+    private GameActivity gameActivity;
+    private Lava lava;
+    private Movement lavaMovement;
+    private SplashScreen splashScreen;
+    private Animator backgroundAnimator;
+    private GameOverUI gameOverUI;
+    private static GameStateManager instance;
+    private HighScoreUI highScoreUI;
+    private HUD hud;
+    private ScoreUI scoreUI;
 
     public GameStateManager(AppCompatActivity p_appCompatActivity, GameActivity p_gameActivity, Lava p_lava,
                             SplashScreen p_splashScreen, Background p_background, GameOverUI p_gameOverUI,
@@ -81,12 +81,7 @@ public class GameStateManager
         highScoreUI.isActive = false;
         scoreUI.Reset();
         scoreUI.isActive = false;
-        //hud.<Animator>getComponentOfType("ANIMATOR").animationIndex = 1;
         hud.isActive = false;
-        //ResetLevel
-        //ResetScore
-        //Reset Frog
-        //Show controls splash screen (tilt, swipe and tap)
     }
 
     void HandlePlayingState()
@@ -96,7 +91,7 @@ public class GameStateManager
         backgroundAnimator.isActive = true;
         highScoreUI.isActive = false;
         hud.isActive = true;
-        hud.<Animator>getComponentOfType("ANIMATOR").animationIndex = 0;
+        hud.<Animator>getComponentOfType("ANIMATOR").changeAnimation(0);
         scoreUI.isActive = true;
 
     }
@@ -106,15 +101,7 @@ public class GameStateManager
         gameOverUI.isActive = true;
         highScoreUI.isActive = true;
         scoreUI.GameOver();
-
-        hud.<Animator>getComponentOfType("ANIMATOR").animationIndex = 1;
-        gameActivity.Restart();
-
-
-
-
-        //Show Click to play again
-        //Show Score vs High Score
+        hud.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
     }
 
     void ResetGame()

@@ -13,16 +13,16 @@ import android.view.SurfaceHolder;
 
 public class Animator extends Component
 {
-    int currentFrame = 0;
-    Vector2 scale;
+    private int currentFrame = 0;
+    private Vector2 scale;
 
-    float timer = 0.0f;
+    private float timer = 0.0f;
 
     private Rect frameToDraw;
     private RectF whereToDraw;
 
-    Animation[] animations;
-    int animationIndex = 0;
+    private Animation[] animations;
+    private int animationIndex = 0;
 
     public Animator(Context context, GameObject p_gameObject, Vector2 p_scale, Animation[] p_animations)
     {

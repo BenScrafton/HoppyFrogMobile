@@ -7,10 +7,10 @@ import android.util.Log;
 
 public class ScoreSaveSystem extends Component
 {
-    Context context;
-    public static final String SHARED_PREFS = "sharedPrefs_score";
-    int highScore = 0;
-    UItext highScoreUIText;
+    private Context context;
+    private static final String SHARED_PREFS = "sharedPrefs_score";
+    private int highScore = 0;
+    private UItext highScoreUIText;
 
     public ScoreSaveSystem(GameObject p_gameObject, Context p_context)
     {

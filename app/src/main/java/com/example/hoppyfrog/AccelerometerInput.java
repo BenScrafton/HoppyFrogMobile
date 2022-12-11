@@ -9,10 +9,9 @@ import android.util.Log;
 
 public class AccelerometerInput implements SensorEventListener
 {
-    GameView gameView;
-
+    private GameView gameView;
     private SensorManager sensorManager;
-    Sensor sensor;
+    private Sensor sensor;
 
     AccelerometerInput(Context context, GameView p_gameView)
     {
@@ -25,7 +24,8 @@ public class AccelerometerInput implements SensorEventListener
 
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
+    public void onSensorChanged(SensorEvent sensorEvent)
+    {
         gameView.SensorChanged(sensorEvent);
     }
 

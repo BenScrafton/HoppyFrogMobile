@@ -17,7 +17,7 @@ public class Lava extends GameObject
 
         //-----ANIMATOR_SETUP-----//
         Animation[] animations = new Animation[1];
-        Animation idle = new Animation(context, R.drawable.anim_lava, 1,
+        Animation idle = new Animation(context, R.drawable.lava, 1,
                 90, 160, 200, 0.5f, false);
         animations[0] = idle;
         animator = new Animator(context, this, new Vector2(10000, 10000), animations);

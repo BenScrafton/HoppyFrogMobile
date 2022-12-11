@@ -9,14 +9,13 @@ import java.util.List;
 
 public class BoxCollider extends Component
 {
-    public RectF box;
-    float scaleX;
-    float scaleY;
-    static List<BoxCollider> boxColliders = new ArrayList<BoxCollider>();
-    public RectF lastBox;
-    boolean isStatic = false;
-
-    List<GameObject> curColliders = new ArrayList<GameObject>();
+    private RectF box;
+    private float scaleX;
+    private float scaleY;
+    private static List<BoxCollider> boxColliders = new ArrayList<BoxCollider>();
+    private RectF lastBox;
+    private boolean isStatic = false;
+    private List<GameObject> curColliders = new ArrayList<GameObject>();
 
     BoxCollider(GameObject p_gameObject, float p_scaleX, float p_scaleY, boolean p_isStatic)
     {
@@ -34,7 +33,6 @@ public class BoxCollider extends Component
     public void update()
     {
         super.update();
-
         if(isActive)
         {
             UpdateBounds();
@@ -65,8 +63,6 @@ public class BoxCollider extends Component
 
         boolean collidedAtAll = false;
         boolean collided = false;
-        int numCollisions = 0;
-
         List<GameObject> tempCurColliders = new ArrayList<>();
 
         for(BoxCollider collider : boxColliders) //On Collision Enter
@@ -78,7 +74,6 @@ public class BoxCollider extends Component
                 if ((this.box.right >= collider.box.left) && (this.box.left <= collider.box.right) &&
                         (this.box.top <= collider.box.bottom) && (this.box.bottom >= collider.box.top))
                 {
-                    numCollisions++;
                     collided = true;
                     collidedAtAll = true;
                 }

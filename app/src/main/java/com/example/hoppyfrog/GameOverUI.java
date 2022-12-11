@@ -7,7 +7,6 @@ public class GameOverUI extends GameObject
     public GameOverUI(Context context)
     {
         position.y = 200;
-
         //--------------------COMPONENT_SETUP--------------------//
 
         //-----ANIMATOR_SETUP-----//
@@ -20,6 +19,5 @@ public class GameOverUI extends GameObject
         Animator animator = new Animator(context, this, new Vector2(1080, 1920), animations);
         components.add(animator);
     }
-
 }
 

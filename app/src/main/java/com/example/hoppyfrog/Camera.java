@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Camera extends Component
 {
-    int ignoreTranslation[];
+    private int ignoreTranslation[];
 
     public Camera(GameObject p_gameObject)
     {

@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
-    Button playBtn;
-    Button settingsBtn;
+public class MainActivity extends AppCompatActivity
+{
+    private Button playBtn;
+    private Button settingsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -20,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener listener = new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 if (view.getId() == R.id.play_btn)
                 {
                     OpenGame();
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 else if (view.getId() == R.id.settings_btn)
                 {
                     OpenSettings();
-                } ;
+                };
             }
         };
 

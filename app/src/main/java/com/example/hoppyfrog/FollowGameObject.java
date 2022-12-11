@@ -4,9 +4,10 @@ import android.util.Log;
 
 public class FollowGameObject extends Component
 {
-    GameObject followObject;
-    Vector2 lastPos;
-    Vector2 offset = new Vector2(0,0);
+    private GameObject followObject;
+    private Vector2 lastPos;
+    private Vector2 offset = new Vector2(0,0);
+
     public FollowGameObject(GameObject p_gameObject, GameObject p_followObject)
     {
         id = "FOLLOW_GAME_OBJECT";
@@ -23,6 +24,5 @@ public class FollowGameObject extends Component
 
         gameObject.position.x = followObject.position.x - offset.x;
         gameObject.position.y = followObject.position.y - offset.y;
-
     }
 }

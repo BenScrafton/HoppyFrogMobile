@@ -6,8 +6,6 @@ public class HUD extends GameObject
 {
     public HUD(Context context)
     {
-        //position.y = 50;
-
         //-----ANIMATOR_SETUP-----//
         Animation[] animations = new Animation[2];
         Animation playing = new Animation(context, R.drawable.your_score, 1,

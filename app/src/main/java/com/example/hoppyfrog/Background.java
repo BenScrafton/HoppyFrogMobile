@@ -4,12 +4,12 @@ import android.content.Context;
 
 public class Background extends GameObject
 {
-    float timer = 0.0f;
-    float animChangeTime = 0.07f * 28.0f;
-    boolean animChanged = false;
-    Animator animator;
-    boolean erupted = false;
-    AudioSource audioSource;
+   private float timer = 0.0f;
+   private float animChangeTime = 0.07f * 28.0f;
+   private boolean animChanged = false;
+   private Animator animator;
+   private boolean erupted = false;
+   private AudioSource audioSource;
 
     public Background(Context context)
     {
@@ -36,6 +36,7 @@ public class Background extends GameObject
         audioSource.LoadMediaPlayerFile(R.raw.lava);
         audioSource.LoadMediaPlayerFile(R.raw.low_rumble);
         audioSource.LoadMediaPlayerFile(R.raw.sound_track);
+        audioSource.PlayMediaPlayer(2);
     }
 
     @Override

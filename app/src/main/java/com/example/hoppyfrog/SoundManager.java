@@ -16,13 +16,13 @@ import java.util.List;
 
 public class SoundManager
 {
-    MediaPlayer soundtrack_mediaPlayer;
-    MediaPlayer ambient_mediaPlayer;
+    private MediaPlayer soundtrack_mediaPlayer;
+    private MediaPlayer ambient_mediaPlayer;
 
-    List<MediaPlayer> mediaPlayers = new ArrayList<>();
-    SoundPool soundPool;
+    private List<MediaPlayer> mediaPlayers = new ArrayList<>();
+    private SoundPool soundPool;
 
-    Context context;
+    private Context context;
 
     SoundManager(Context p_context)
     {

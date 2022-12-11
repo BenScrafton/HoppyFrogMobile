@@ -4,8 +4,8 @@ import android.util.Log;
 
 public class Gravity extends Component
 {
-    Vector2 gravity = new Vector2(0, -9.81f);
-    Vector2 velocity = new Vector2(0, 0);
+    public Vector2 gravity = new Vector2(0, -9.81f);
+    public Vector2 velocity = new Vector2(0, 0);
     public boolean grounded = false;
 
     public Gravity(GameObject p_gameObject, Vector2 p_gravity)
@@ -40,7 +40,6 @@ public class Gravity extends Component
     void SetGrounded(boolean g)
     {
         grounded = g;
-
         if(g)
         {
             gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x = 0;

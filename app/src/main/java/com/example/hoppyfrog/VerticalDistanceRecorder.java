@@ -4,16 +4,15 @@ import android.util.Log;
 
 public class VerticalDistanceRecorder extends Component
 {
-    UItext uiText;
-    GameObject recordObject;
-    Movement movement;
-    float distanceTravelledUp = 0;
+    private UItext uiText;
+    private GameObject recordObject;
+    private Movement movement;
+    private float distanceTravelledUp = 0;
 
-    ScoreSaveSystem highScoreSaveSystem;
+    private ScoreSaveSystem highScoreSaveSystem;
+    private float startPositionY;
 
-    float startPositionY;
-
-    boolean updatedHighScore = false;
+    public boolean updatedHighScore = false;
 
     public VerticalDistanceRecorder(GameObject p_gameObject, GameObject p_recordObject, HighScoreUI p_highScoreUI)
     {
@@ -33,9 +32,7 @@ public class VerticalDistanceRecorder extends Component
     public void update()
     {
         super.update();
-
         Log.e("V: ", Float.toString(movement.velocity.y));
-
         distanceTravelledUp = (startPositionY - recordObject.position.y) / 100;
 
         if( distanceTravelledUp < 0)
@@ -44,13 +41,10 @@ public class VerticalDistanceRecorder extends Component
         }
         uiText.text = Integer.toString((int)distanceTravelledUp);
 
-
         if(GameView.gameManager.GetGameState() == GameState.GAMEOVER && !updatedHighScore)
         {
             highScoreSaveSystem.updateHighScore((int)distanceTravelledUp);
             updatedHighScore = true;
         }
     }
-
-
 }

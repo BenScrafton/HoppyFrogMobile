@@ -9,11 +9,11 @@ import java.util.Random;
 
 public class PadPlacer
 {
-    LillyPad[] lillyPads = new LillyPad[10];
-    float minDisplacement;
-    float maxDisplacement;
-    Vector2 startPos;
-    int frontIndex = 9;
+    private LillyPad[] lillyPads = new LillyPad[10];
+    private float minDisplacement;
+    private float maxDisplacement;
+    private Vector2 startPos;
+    private int frontIndex = 9;
 
     public PadPlacer(Context context, List<GameObject> p_gameObjects, Vector2 p_startPos, float p_minDisplacement, float p_maxDisplacement)
     {
@@ -70,11 +70,8 @@ public class PadPlacer
 
             if(distFromCamera > 3000)
             {
-                Log.e("PLACE", "Place");
-
                 l.position.y = lillyPads[frontIndex].position.y - 500;
                 l.position.x = startPos.x + (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
-                //l.position.x =  (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
                 frontIndex = index;
             }
             index++;

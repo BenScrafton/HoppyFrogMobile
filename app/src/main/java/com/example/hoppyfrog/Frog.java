@@ -11,17 +11,15 @@ public class Frog extends GameObject
     Movement movement;
     Gravity gravity;
     BoxCollider collider;
-
     AudioSource audioSource;
 
-    int numJumps = 2;
-    int numJumpsLeft = 2;
+    private int numJumps = 2;
+    private int numJumpsLeft = 2;
+
     public boolean isAlive = true;
-    LavaSplash lavaSplash;
 
     public Frog(Context context)
     {
-        lavaSplash = new LavaSplash(context);
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
         position = new Vector2((width / 2) - 100, height / 2);
@@ -110,28 +108,16 @@ public class Frog extends GameObject
         {
             if(isAlive)
             {
-                isAlive = false;
-                GameView.gameManager.SetGameState(GameState.GAMEOVER);
-                Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
-                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
-                this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
-                this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
-                audioSource.PlaySound(1);
+                Die();
             }
         }
         else if(collision.collider.tag == "Meteor")
         {
             if(isAlive)
             {
-                isAlive = false;
-                GameView.gameManager.SetGameState(GameState.GAMEOVER);
-                Log.e("On Collision", "change anim");
                 this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(4);
-                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
-                this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
-                this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
-                audioSource.PlaySound(1);
+                Die();
             }
         }
     }
@@ -145,6 +131,16 @@ public class Frog extends GameObject
         {
             this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
         }
+    }
+
+    void Die()
+    {
+        isAlive = false;
+        GameView.gameManager.SetGameState(GameState.GAMEOVER);
+        this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
+        this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
+        this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+        audioSource.PlaySound(1);
     }
 
     public void Jump()

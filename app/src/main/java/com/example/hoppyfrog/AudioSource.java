@@ -7,10 +7,9 @@ import java.util.List;
 
 public class AudioSource extends Component
 {
-    List<Integer> soundPool_ids = new ArrayList<>();
-    List<Integer> mediaPlayer_ids = new ArrayList<>();
-
-    int soundStream;
+    private List<Integer> soundPool_ids = new ArrayList<>();
+    private List<Integer> mediaPlayer_ids = new ArrayList<>();
+    private int soundStream;
 
     AudioSource(GameObject p_gameObject)
     {

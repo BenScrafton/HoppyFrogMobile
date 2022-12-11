@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class Meteor extends GameObject
 {
-    AudioSource audioSource;
+    public AudioSource audioSource;
 
     public Meteor(Context context, Vector2 p_position)
     {
@@ -38,5 +38,4 @@ public class Meteor extends GameObject
         audioSource = new AudioSource(this);
         audioSource.LoadSoundPoolFile(R.raw.whistle);
     }
-
 }

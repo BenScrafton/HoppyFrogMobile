@@ -4,16 +4,16 @@ import android.util.Log;
 
 public class Movement extends Component
 {
-    GameObject gameObject;
+    private GameObject gameObject;
+
     public Vector2 velocity = new Vector2(0,0);
     public boolean isDodging = false;
 
-    float dodgeTimer = 0.0f;
-    float dodgeCooldown = 0.2f;
-    float dodgeDirection = 0;
+    private float dodgeTimer = 0.0f;
+    private float dodgeCooldown = 0.2f;
+    private float dodgeDirection = 0;
 
-    Vector2 lastMovement = new Vector2(0,0);
-
+    private Vector2 lastMovement = new Vector2(0,0);
 
     public Movement(GameObject p_gameObject)
     {
@@ -25,7 +25,6 @@ public class Movement extends Component
     public void update()
     {
         super.update();
-
         Vector2 startPos = new Vector2(gameObject.position.x, gameObject.position.y);
 
         if(isActive)
@@ -34,14 +33,9 @@ public class Movement extends Component
             {
                 velocity.x += 50000 * Time.getInstance().deltaTime * dodgeDirection;
             }
-
-
-
             gameObject.position.x += velocity.x * Time.getInstance().deltaTime;
             gameObject.position.y -= velocity.y * Time.getInstance().deltaTime;
         }
-
-
 
         if(isDodging)
         {

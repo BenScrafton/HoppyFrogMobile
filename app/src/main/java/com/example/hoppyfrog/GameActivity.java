@@ -1,7 +1,11 @@
 package com.example.hoppyfrog;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.SensorEventListener;
@@ -11,10 +15,21 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.LeaderboardsClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 public class GameActivity extends AppCompatActivity
 {
-    GameView gameView;
-    AppCompatActivity appCompatActivity;
+    private GameView gameView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,10 +61,5 @@ public class GameActivity extends AppCompatActivity
     {
         super.onPause();
         gameView.pause();
-    }
-
-    public void Restart()
-    {
-
     }
 }

@@ -8,7 +8,7 @@ import android.os.Build;
 
 public class ScoreUI extends GameObject
 {
-    VerticalDistanceRecorder recorder;
+    private VerticalDistanceRecorder recorder;
 
     public ScoreUI(GameObject recordObject, Context context, HighScoreUI highScoreUI)
     {
@@ -21,8 +21,6 @@ public class ScoreUI extends GameObject
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
         paint.setTextSize(130.0f);
-
-        //Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/press_start_2.ttf");
 
         if(Build.VERSION.SDK_INT > 26)
         {

@@ -6,9 +6,9 @@ import android.graphics.Paint;
 
 public class UItext extends Component
 {
-    Vector2 position;
-    Paint paint;
-    String text;
+    private Vector2 position;
+    private Paint paint;
+    public String text;
 
     UItext(GameObject p_gameObject, String p_text, Paint p_paint, Vector2 p_position)
     {

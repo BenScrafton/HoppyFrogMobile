@@ -21,25 +21,23 @@ import java.util.List;
 public class GameView extends SurfaceView implements Runnable, View.OnTouchListener, GestureDetector.OnGestureListener
 {
     volatile boolean playing = true;
-    Thread gameThread;
-    float deltaTime;
+    private Thread gameThread;
+    private float deltaTime;
 
-    SurfaceHolder surfaceHolder;
-    Canvas canvas = new Canvas();
+    private SurfaceHolder surfaceHolder;
+    private Canvas canvas = new Canvas();
 
     public static MainCamera mainCamera;
     public static List<Layer> layers = new ArrayList<>();
     public static PadPlacer padPlacer;
     public static MeteorManager meteorManager;
     public static GameStateManager gameManager;
-
-    GameObject player;
-
-    AccelerometerInput accelerometerInput;
-    GestureDetector gestureDetector;
     public static SoundManager soundManager;
-    //MediaPlayer mediaPlayer;
-    Context context;
+
+    private GameObject player;
+    private AccelerometerInput accelerometerInput;
+    private GestureDetector gestureDetector;
+    private Context context;
 
     public GameView(Context p_context, AppCompatActivity appCompatActivity, GameActivity gameActivity)
     {
@@ -111,6 +109,20 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                                             hud, score);
     }
 
+    public void run()
+    {
+        while(playing)
+        {
+            long startFrameTime = System.currentTimeMillis();
+
+            update();
+            render();
+
+            deltaTime = (System.currentTimeMillis() - startFrameTime) / 1000.0f;
+            Time.getInstance().setDeltaTime(deltaTime);
+        }
+    }
+
     public void SensorChanged(SensorEvent event)
     {
         if(((Frog)player).isAlive && gameManager.gameState != GameState.BEGIN_PLAY)
@@ -140,20 +152,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         soundManager.PauseMediaPlayers();
     }
 
-    public void run()
-    {
-        while(playing)
-        {
-            long startFrameTime = System.currentTimeMillis();
-
-            update();
-            render();
-
-            deltaTime = (System.currentTimeMillis() - startFrameTime) / 1000.0f;
-            Time.getInstance().setDeltaTime(deltaTime);
-        }
-    }
-
     void update()
     {
         for(Layer layer : layers) // update main gameplay layers
@@ -178,7 +176,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         {
             canvas = surfaceHolder.lockCanvas();
             mainCamera.<Camera>getComponentOfType("CAMERA").render(canvas);
-
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
@@ -186,26 +183,29 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     //-----------------------GESTURES-----------------------//
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
+    public boolean onTouch(View view, MotionEvent motionEvent)
+    {
         Log.d("Gestures", "onTouch");
         gestureDetector.onTouchEvent(motionEvent);
         return true;
     }
 
     @Override
-    public boolean onDown(@NonNull MotionEvent motionEvent) {
-
+    public boolean onDown(@NonNull MotionEvent motionEvent)
+    {
         Log.d("Gestures", "onDown");
         return false;
     }
 
     @Override
-    public void onShowPress(@NonNull MotionEvent motionEvent) {
+    public void onShowPress(@NonNull MotionEvent motionEvent)
+    {
         Log.d("Gestures", "onShowPress");
     }
 
     @Override
-    public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
+    public boolean onSingleTapUp(@NonNull MotionEvent motionEvent)
+    {
         Log.d("Gestures", "onSingleTapUp");
 
         switch (gameManager.GetGameState())
@@ -224,20 +224,22 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     @Override
-    public boolean onScroll(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+    public boolean onScroll(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1)
+    {
         Log.d("Gestures", "onScroll");
         return false;
     }
 
     @Override
-    public void onLongPress(@NonNull MotionEvent motionEvent) {
+    public void onLongPress(@NonNull MotionEvent motionEvent)
+    {
         Log.d("Gestures", "onLongPress");
     }
 
     @Override
-    public boolean onFling(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1) {
+    public boolean onFling(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1)
+    {
         Log.d("Gestures", "onFling");
-
         switch (gameManager.GetGameState())
         {
             case BEGIN_PLAY:

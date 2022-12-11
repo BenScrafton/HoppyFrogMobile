@@ -8,14 +8,14 @@ import java.util.List;
 
 public class MeteorManager
 {
-    Meteor[] meteors = new Meteor[10];
-    List<Meteor> active = new ArrayList<>();
-    List<Meteor> inActive = new ArrayList<>();
+    private Meteor[] meteors = new Meteor[10];
+    private List<Meteor> active = new ArrayList<>();
+    private List<Meteor> inActive = new ArrayList<>();
 
-    float meteorTimer = 0.0f;
-    float meteorCooldown = 6.0f;
-    float maxDisplacement = 500;
-    float minDisplacement = -500;
+    private float meteorTimer = 0.0f;
+    private float meteorCooldown = 6.0f;
+    private float maxDisplacement = 500;
+    private float minDisplacement = -500;
 
     public MeteorManager(Context context, List<GameObject> p_gameObjects)
     {
@@ -39,13 +39,13 @@ public class MeteorManager
         for(int i = active.size()-1; i > -1; i--)
         {
             Meteor m = active.get(i);
-
             inActive.add(m);
             active.remove(m);
             m.position = new Vector2(10000000, 1000000);
             m.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
             m.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0,0);
             m.isActive = false;
+            m.audioSource.StopSound();
         }
     }
 

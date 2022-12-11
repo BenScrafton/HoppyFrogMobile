@@ -17,11 +17,6 @@ public class Time
         return instance;
     }
 
-    void update()
-    {
-
-    }
-
     void setDeltaTime(float dt)
     {
         deltaTime = dt;

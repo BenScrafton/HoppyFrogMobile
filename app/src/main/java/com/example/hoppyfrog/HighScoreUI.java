@@ -10,12 +10,10 @@ import android.util.Log;
 
 public class HighScoreUI extends GameObject
 {
-
     public HighScoreUI(Context context)
     {
         position.x = 500;
         position.y = 240;
-
         position = new Vector2(550,220);
         //--------------------COMPONENT_SETUP--------------------//
 
@@ -35,7 +33,6 @@ public class HighScoreUI extends GameObject
         components.add(UI);
 
         //-----SCORE_SAVE_SYSTEM_SETUP-----//
-
         ScoreSaveSystem scoreSaveSystem = new ScoreSaveSystem(this, context);
         components.add(scoreSaveSystem);
     }
