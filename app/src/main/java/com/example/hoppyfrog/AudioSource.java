@@ -14,6 +14,7 @@ public class AudioSource extends Component
     AudioSource(GameObject p_gameObject)
     {
         id = "AUDIO_SOURCE";
+        componentType = ComponentType.AUDIO_SOURCE;
         gameObject = p_gameObject;
     }
 

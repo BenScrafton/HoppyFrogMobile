@@ -10,7 +10,8 @@ enum ComponentType
     GRAVITY,
     MOVEMENT,
     UI_TEXT,
-    VERTICAL_DISTANCE_RECORDER
+    VERTICAL_DISTANCE_RECORDER,
+    SCORE_SAVE_SYSTEM
 }
 
 public class Component

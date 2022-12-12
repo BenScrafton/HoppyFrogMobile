@@ -127,8 +127,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     {
         if(((Frog)player).isAlive && gameManager.gameState != GameState.BEGIN_PLAY)
         {
-            Vector2 v = new Vector2(player.<Movement>getComponentOfType("MOVEMENT").velocity.x, player.<Movement>getComponentOfType("MOVEMENT").velocity.y);
-            player.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2( (event.values[0] * -100), v.y);
+            Vector2 v = new Vector2(player.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.x, player.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.y);
+            player.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity = new Vector2( (event.values[0] * -100), v.y);
         }
     }
 
@@ -138,6 +138,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gameThread = new Thread(this);
         gameThread.start();
         accelerometerInput.Resume();
+        soundManager.resumeSounds();
+        soundManager.resumeMediaPlayers();
     }
 
     public void pause()
@@ -150,6 +152,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         }
         accelerometerInput.Pause();
         soundManager.PauseMediaPlayers();
+        soundManager.pauseSounds();
     }
 
     void update()
@@ -175,7 +178,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         if(surfaceHolder.getSurface().isValid())
         {
             canvas = surfaceHolder.lockCanvas();
-            mainCamera.<Camera>getComponentOfType("CAMERA").render(canvas);
+            mainCamera.<Camera>getComponentOfType(ComponentType.CAMERA).render(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }

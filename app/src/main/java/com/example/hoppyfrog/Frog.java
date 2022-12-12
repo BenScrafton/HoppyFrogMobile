@@ -95,10 +95,10 @@ public class Frog extends GameObject
                     break;
                 case BOTTOM:
                     position.y += collision.overlapDistance - 0.1f;
-                    this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(this.<Movement>getComponentOfType("MOVEMENT").velocity.x,0);
-                    this.<Gravity>getComponentOfType("GRAVITY").velocity = new Vector2(0,0);
-                    this.<Gravity>getComponentOfType("GRAVITY").grounded = true;
-                    this.<Animator>getComponentOfType("ANIMATOR").setAnimationIndex(0);
+                    movement.velocity = new Vector2(movement.velocity.x,0);
+                    gravity.velocity = new Vector2(0,0);
+                    gravity.grounded = true;
+                    animator.setAnimationIndex(0);
 
                     numJumpsLeft = numJumps;
                     break;
@@ -108,7 +108,7 @@ public class Frog extends GameObject
         {
             if(isAlive)
             {
-                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(3);
+                animator.changeAnimation(3);
                 Die();
             }
         }
@@ -116,7 +116,7 @@ public class Frog extends GameObject
         {
             if(isAlive)
             {
-                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(4);
+                animator.changeAnimation(4);
                 Die();
             }
         }
@@ -129,7 +129,7 @@ public class Frog extends GameObject
 
         if(otherCollider.tag == "LillyPad")
         {
-            this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
+            gravity.grounded = false;
         }
     }
 
@@ -137,9 +137,9 @@ public class Frog extends GameObject
     {
         isAlive = false;
         GameView.gameManager.SetGameState(GameState.GAMEOVER);
-        this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 0);
-        this.<Movement>getComponentOfType("MOVEMENT").isActive = false;
-        this.<Gravity>getComponentOfType("GRAVITY").isActive = false;
+        movement.velocity = new Vector2(0, 0);
+        movement.isActive = false;
+        gravity.isActive = false;
         audioSource.PlaySound(1);
     }
 
@@ -149,9 +149,9 @@ public class Frog extends GameObject
         {
             if(numJumpsLeft > 0)
             {
-                this.<Gravity>getComponentOfType("GRAVITY").grounded = false;
-                this.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0, 700.0f);
-                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+                gravity.grounded = false;
+                movement.velocity = new Vector2(0, 700.0f);
+                animator.changeAnimation(1);
 
                 numJumpsLeft--;
                 audioSource.PlaySound(0);
@@ -175,12 +175,11 @@ public class Frog extends GameObject
         position = new Vector2((width / 2) - 100, (height / 2) - 1);
         collider.UpdateBounds();
         movement.velocity = new Vector2(0,0);
-        //gravity.SetGrounded(true);
         animator.changeAnimation(0);
         isAlive = true;
 
         audioSource.StopSound();
-        this.<Movement>getComponentOfType("MOVEMENT").isActive = true;
-        this.<Gravity>getComponentOfType("GRAVITY").isActive = true;
+        movement.isActive = true;
+        gravity.isActive = true;
     }
 }

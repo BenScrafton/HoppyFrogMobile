@@ -27,6 +27,7 @@ public class Animator extends Component
     public Animator(Context context, GameObject p_gameObject, Vector2 p_scale, Animation[] p_animations)
     {
         id = "ANIMATOR";
+        componentType = ComponentType.ANIMATOR;
 
         gameObject = p_gameObject;
         animations = p_animations;

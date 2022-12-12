@@ -60,7 +60,7 @@ public class Background extends GameObject
 
             if(timer >= 2)
             {
-                this.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+                this.<Animator>getComponentOfType(ComponentType.ANIMATOR).changeAnimation(1);
                 animChanged = true;
                 timer = 0.0f;
             }

@@ -11,6 +11,7 @@ public class FollowGameObject extends Component
     public FollowGameObject(GameObject p_gameObject, GameObject p_followObject)
     {
         id = "FOLLOW_GAME_OBJECT";
+        componentType = ComponentType.FOLLOW_OBJECT;
         gameObject = p_gameObject;
         followObject = p_followObject;
         offset.x = followObject.position.x - gameObject.position.x;

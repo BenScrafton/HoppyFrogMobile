@@ -11,6 +11,7 @@ public class Gravity extends Component
     public Gravity(GameObject p_gameObject, Vector2 p_gravity)
     {
         id = "GRAVITY";
+        componentType = ComponentType.GRAVITY;
         gameObject = p_gameObject;
         gravity = p_gravity;
     }
@@ -32,8 +33,8 @@ public class Gravity extends Component
             velocity.x += gravity.x * Time.getInstance().deltaTime;
             velocity.y += gravity.y * Time.getInstance().deltaTime;
 
-            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x += gravity.x * Time.getInstance().deltaTime;
-            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y += gravity.y * Time.getInstance().deltaTime;
+            gameObject.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.x += gravity.x * Time.getInstance().deltaTime;
+            gameObject.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.y += gravity.y * Time.getInstance().deltaTime;
         }
     }
 
@@ -42,8 +43,8 @@ public class Gravity extends Component
         grounded = g;
         if(g)
         {
-            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.x = 0;
-            gameObject.<Movement>getComponentOfType("MOVEMENT").velocity.y = 0;
+            gameObject.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.x = 0;
+            gameObject.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity.y = 0;
 
             velocity.x = 0;
             velocity.y = 0;

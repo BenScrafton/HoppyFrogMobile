@@ -14,6 +14,7 @@ public class Camera extends Component
     public Camera(GameObject p_gameObject)
     {
         id = "CAMERA";
+        componentType = ComponentType.CAMERA;
         gameObject = p_gameObject;
     }
 
@@ -36,14 +37,14 @@ public class Camera extends Component
                     continue;
                 }
 
-                if(g.<Animator>getComponentOfType("ANIMATOR") != null)
+                if(g.<Animator>getComponentOfType(ComponentType.ANIMATOR) != null)
                 {
-                    g.<Animator>getComponentOfType("ANIMATOR").draw(canvas, offset);
+                    g.<Animator>getComponentOfType(ComponentType.ANIMATOR).draw(canvas, offset);
                 }
 
-                if(g.<UItext>getComponentOfType("UI_TEXT") != null)
+                if(g.<UItext>getComponentOfType(ComponentType.UI_TEXT) != null)
                 {
-                    g.<UItext>getComponentOfType("UI_TEXT").render(canvas);
+                    g.<UItext>getComponentOfType(ComponentType.UI_TEXT).render(canvas);
                 }
             }
         }

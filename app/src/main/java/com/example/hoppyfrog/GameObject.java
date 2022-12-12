@@ -27,11 +27,16 @@ public class GameObject implements Observer
         }
     }
 
-    public <T> T getComponentOfType(String id)
+    public <T> T getComponentOfType(ComponentType type)
     {
         for(Component c : components)
         {
-            if(c.id == id)
+            //if(c.id == id)
+            //{
+                //return (T) c;
+            //}
+
+            if(c.componentType == type)
             {
                 return (T) c;
             }

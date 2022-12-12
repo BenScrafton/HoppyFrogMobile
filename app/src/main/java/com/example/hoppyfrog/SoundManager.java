@@ -20,6 +20,7 @@ public class SoundManager
     private MediaPlayer ambient_mediaPlayer;
 
     private List<MediaPlayer> mediaPlayers = new ArrayList<>();
+    private List<Integer> mediaDuration = new ArrayList<>();
     private SoundPool soundPool;
 
     private Context context;
@@ -48,9 +49,6 @@ public class SoundManager
     public void CreateMediaPlayer(int soundId)
     {
         MediaPlayer m = MediaPlayer.create(context, soundId);
-
-        Log.e("SOUND", "CreateMediaPlayer: ");
-
         mediaPlayers.add(m);
     }
 
@@ -65,8 +63,6 @@ public class SoundManager
 
     public void PlayMediaPlayers()
     {
-        Log.e("SOUND", "PlayMediaPlayers: " + mediaPlayers.size() );
-
         for(MediaPlayer m : mediaPlayers)
         {
             if (!m.isPlaying())
@@ -79,19 +75,25 @@ public class SoundManager
 
     public void PauseMediaPlayers()
     {
+        int i = 0;
+
+        mediaDuration.clear();
         for(MediaPlayer m : mediaPlayers)
         {
             if (m.isPlaying())
             {
                 m.pause();
+
+                Integer duration = m.getCurrentPosition();
+                mediaDuration.add(duration);
+
+                i++;
             }
         }
     }
 
     public void PauseMediaPlayer(int index)
     {
-        Log.e("SOUND", "PauseMediaPlayer: " + mediaPlayers.size() );
-
         MediaPlayer mp =  mediaPlayers.get(index);
 
         if (mp.isPlaying()){
@@ -108,9 +110,34 @@ public class SoundManager
         }
     }
 
+    public void resumeMediaPlayers()
+    {
+        int i = 0;
+
+        if(mediaDuration.size() > 0)
+        {
+            for(MediaPlayer m : mediaPlayers)
+            {
+                m.seekTo(mediaDuration.get(i));
+                m.start();
+                i++;
+            }
+        }
+    }
+
     public void stopSound(int id)
     {
         soundPool.stop(id);
+    }
+
+    public void resumeSounds()
+    {
+        soundPool.autoResume();
+    }
+
+    public void pauseSounds()
+    {
+        soundPool.autoPause();
     }
 
     public void destroySoundPool()
@@ -124,5 +151,4 @@ public class SoundManager
         int streamID = soundPool.play(id, 0.8f, 0.8f, 1 ,0,1f);
         return streamID;
     }
-
 }

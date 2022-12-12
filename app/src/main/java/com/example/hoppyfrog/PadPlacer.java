@@ -52,7 +52,7 @@ public class PadPlacer
             }
 
             l.position = new Vector2(startPos.x + xDisplace, startPos.y + curDisplacement.y);
-            l.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
+            l.<BoxCollider>getComponentOfType(ComponentType.BOX_COLLIDER).UpdateBounds();
 
             curDisplacement.y -= 500;
             index++;

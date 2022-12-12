@@ -42,8 +42,8 @@ public class MeteorManager
             inActive.add(m);
             active.remove(m);
             m.position = new Vector2(10000000, 1000000);
-            m.<BoxCollider>getComponentOfType("BOXCOLLIDER").UpdateBounds();
-            m.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0,0);
+            m.<BoxCollider>getComponentOfType(ComponentType.BOX_COLLIDER).UpdateBounds();
+            m.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity = new Vector2(0,0);
             m.isActive = false;
             m.audioSource.StopSound();
         }
@@ -73,7 +73,7 @@ public class MeteorManager
                     active.remove(m);
                     inActive.add(m);
                     m.position = new Vector2(-1000, -1000);
-                    m.<Movement>getComponentOfType("MOVEMENT").velocity = new Vector2(0,0);
+                    m.<Movement>getComponentOfType(ComponentType.MOVEMENT).velocity = new Vector2(0,0);
                 }
             }
         }

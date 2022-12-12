@@ -19,10 +19,10 @@ public class VerticalDistanceRecorder extends Component
         id = "VERT_DISTANCE_RECORDER";
         gameObject = p_gameObject;
 
-        uiText = gameObject.<UItext>getComponentOfType("UI_TEXT");
+        uiText = gameObject.<UItext>getComponentOfType(ComponentType.UI_TEXT);
         recordObject = p_recordObject;
-        movement = recordObject.<Movement>getComponentOfType("MOVEMENT");
-        highScoreSaveSystem = p_highScoreUI.<ScoreSaveSystem>getComponentOfType("SCORE_SAVE_SYSTEM");
+        movement = recordObject.<Movement>getComponentOfType(ComponentType.MOVEMENT);
+        highScoreSaveSystem = p_highScoreUI.<ScoreSaveSystem>getComponentOfType(ComponentType.SCORE_SAVE_SYSTEM);
         startPositionY = recordObject.position.y;
 
         uiText.text = "distance: 0";

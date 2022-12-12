@@ -38,12 +38,12 @@ public class ScoreUI extends GameObject
 
     public void GameOver()
     {
-        this.<UItext>getComponentOfType("UI_TEXT").SetPosition(new Vector2(550, 475));
+        this.<UItext>getComponentOfType(ComponentType.UI_TEXT).SetPosition(new Vector2(550, 475));
     }
 
     public void Reset()
     {
-        this.<UItext>getComponentOfType("UI_TEXT").SetPosition(new Vector2(550, 220));
+        this.<UItext>getComponentOfType(ComponentType.UI_TEXT).SetPosition(new Vector2(550, 220));
         recorder.updatedHighScore = false;
     }
 

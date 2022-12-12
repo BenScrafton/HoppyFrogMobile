@@ -18,6 +18,7 @@ public class Movement extends Component
     public Movement(GameObject p_gameObject)
     {
         id = "MOVEMENT";
+        componentType = ComponentType.MOVEMENT;
         gameObject = p_gameObject;
     }
 

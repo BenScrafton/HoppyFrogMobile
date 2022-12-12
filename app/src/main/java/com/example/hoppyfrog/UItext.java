@@ -13,6 +13,7 @@ public class UItext extends Component
     UItext(GameObject p_gameObject, String p_text, Paint p_paint, Vector2 p_position)
     {
         id = "UI_TEXT";
+        componentType = ComponentType.UI_TEXT;
         text = p_text;
         gameObject = p_gameObject;
         paint = p_paint;

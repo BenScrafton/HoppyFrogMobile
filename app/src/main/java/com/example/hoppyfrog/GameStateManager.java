@@ -33,7 +33,7 @@ public class GameStateManager
         lava = p_lava;
         splashScreen = p_splashScreen;
         gameOverUI = p_gameOverUI;
-        backgroundAnimator = p_background.<Animator>getComponentOfType("ANIMATOR");
+        backgroundAnimator = p_background.<Animator>getComponentOfType(ComponentType.ANIMATOR);
         scoreUI = p_scoreUI;
         highScoreUI = p_highScoreUI;
         hud = p_hud;
@@ -91,7 +91,7 @@ public class GameStateManager
         backgroundAnimator.isActive = true;
         highScoreUI.isActive = false;
         hud.isActive = true;
-        hud.<Animator>getComponentOfType("ANIMATOR").changeAnimation(0);
+        hud.<Animator>getComponentOfType(ComponentType.ANIMATOR).changeAnimation(0);
         scoreUI.isActive = true;
 
     }
@@ -101,7 +101,7 @@ public class GameStateManager
         gameOverUI.isActive = true;
         highScoreUI.isActive = true;
         scoreUI.GameOver();
-        hud.<Animator>getComponentOfType("ANIMATOR").changeAnimation(1);
+        hud.<Animator>getComponentOfType(ComponentType.ANIMATOR).changeAnimation(1);
     }
 
     void ResetGame()

@@ -15,10 +15,10 @@ public class ScoreSaveSystem extends Component
     public ScoreSaveSystem(GameObject p_gameObject, Context p_context)
     {
         id = "SCORE_SAVE_SYSTEM";
-
+        componentType = ComponentType.SCORE_SAVE_SYSTEM;
         gameObject = p_gameObject;
         context = p_context;
-        highScoreUIText = gameObject.<UItext>getComponentOfType("UI_TEXT");
+        highScoreUIText = gameObject.<UItext>getComponentOfType(ComponentType.UI_TEXT);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 

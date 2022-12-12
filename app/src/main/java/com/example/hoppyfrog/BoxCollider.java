@@ -20,6 +20,7 @@ public class BoxCollider extends Component
     BoxCollider(GameObject p_gameObject, float p_scaleX, float p_scaleY, boolean p_isStatic)
     {
         id = "BOXCOLLIDER";
+        componentType = ComponentType.BOX_COLLIDER;
         isStatic = p_isStatic;
         gameObject = p_gameObject;
         scaleX = p_scaleX;
