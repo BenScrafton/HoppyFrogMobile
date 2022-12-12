@@ -16,7 +16,6 @@ public class AccelerometerInput implements SensorEventListener
     AccelerometerInput(Context context, GameView p_gameView)
     {
         gameView = p_gameView;
-
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener((SensorEventListener) this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -30,14 +29,9 @@ public class AccelerometerInput implements SensorEventListener
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
+    public void onAccuracyChanged(Sensor sensor, int i) {}
 
-    }
-
-    public void Resume()
-    {
-        sensorManager.registerListener((SensorEventListener) this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-    }
+    public void Resume() { sensorManager.registerListener((SensorEventListener) this, sensor, SensorManager.SENSOR_DELAY_NORMAL); }
 
     public void Pause()
     {

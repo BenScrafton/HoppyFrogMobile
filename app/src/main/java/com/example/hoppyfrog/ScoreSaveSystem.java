@@ -15,6 +15,7 @@ public class ScoreSaveSystem extends Component
     public ScoreSaveSystem(GameObject p_gameObject, Context p_context)
     {
         id = "SCORE_SAVE_SYSTEM";
+
         componentType = ComponentType.SCORE_SAVE_SYSTEM;
         gameObject = p_gameObject;
         context = p_context;

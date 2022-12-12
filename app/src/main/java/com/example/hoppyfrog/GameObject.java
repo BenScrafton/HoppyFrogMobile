@@ -1,17 +1,14 @@
 package com.example.hoppyfrog;
 
-import com.example.hoppyfrog.observers.Observer;
-import com.example.hoppyfrog.observers.events.Event;
-import com.example.hoppyfrog.observers.events.EventType;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class GameObject implements Observer
+public class GameObject
 {
     String tag = "";
     Vector2 position = new Vector2(0,0);
     ArrayList<Component> components  = new ArrayList<>();
+
     boolean isActive = true;
 
     public void update()
@@ -31,26 +28,12 @@ public class GameObject implements Observer
     {
         for(Component c : components)
         {
-            //if(c.id == id)
-            //{
-                //return (T) c;
-            //}
-
             if(c.componentType == type)
             {
                 return (T) c;
             }
         }
         return null;
-    }
-
-    @Override
-    public void onNotify(GameObject object, Event event)
-    {
-        if(event.eventType == EventType.ON_GROUNDED)
-        {
-
-        }
     }
 
     public void OnCollision(Collision collision) {}

@@ -21,9 +21,6 @@ public class AudioSource extends Component
     void LoadSoundPoolFile(int id)
     {
         int sid = GameView.soundManager.LoadSound(id);
-
-        Log.e("SOUND", "LoadSoundPoolFile: " + sid );
-
         soundPool_ids.add(sid);
     }
 
@@ -53,9 +50,5 @@ public class AudioSource extends Component
         GameView.soundManager.PlayMediaPlayer(index);
     }
 
-    void PlayMediaPlayers()
-    {
-        Log.e("SOUND", "PlayMediaPlayers: PLAY" );
-        GameView.soundManager.PlayMediaPlayers();
-    }
+    void PlayMediaPlayers() { GameView.soundManager.PlayMediaPlayers(); }
 }

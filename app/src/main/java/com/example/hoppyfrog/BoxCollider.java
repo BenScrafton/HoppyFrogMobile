@@ -47,14 +47,6 @@ public class BoxCollider extends Component
         box.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scaleX, gameObject.position.y + scaleY);
     }
 
-    void AccountForCameraUpdate(Vector2 deltaPos)
-    {
-        box.set(gameObject.position.x, gameObject.position.y, gameObject.position.x + scaleX, gameObject.position.y + scaleY);
-
-        lastBox.set(lastBox.left - deltaPos.x, lastBox.top - deltaPos.y,
-         lastBox.right - deltaPos.x, lastBox.bottom - deltaPos.y);
-    }
-
     void CheckCollisions()
     {
         if(isStatic)
@@ -72,6 +64,7 @@ public class BoxCollider extends Component
 
             if (collider != this)
             {
+                // Check for overlap
                 if ((this.box.right >= collider.box.left) && (this.box.left <= collider.box.right) &&
                         (this.box.top <= collider.box.bottom) && (this.box.bottom >= collider.box.top))
                 {

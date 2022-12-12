@@ -25,6 +25,7 @@ public class PadPlacer
         for (int i = 1; i <= 10; i++)
         {
             float xDisplace = 0;
+
             if(i != 1)
             {
                 xDisplace = (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);
@@ -46,6 +47,7 @@ public class PadPlacer
         for (LillyPad l : lillyPads)
         {
             float xDisplace = 0;
+
             if(index != 0)
             {
                 xDisplace = (float) Math.floor(Math.random()*(maxDisplacement-minDisplacement+1)+minDisplacement);

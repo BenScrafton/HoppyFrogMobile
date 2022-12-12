@@ -80,20 +80,16 @@ public class Frog extends GameObject
     {
         super.OnCollision(collision);
 
-        if(collision.collider.tag == "LillyPad" && isAlive)
+        if (!isAlive)
         {
-            switch (collision.collisionSide)
-            {
-                case TOP:
-                    //position.y += collision.overlapDistance + 2;
-                    break;
-                case RIGHT:
-                    //position.x += collision.overlapDistance + 2;
-                    break;
-                case LEFT:
-                    //position.x += collision.overlapDistance + 2;
-                    break;
-                case BOTTOM:
+            return;
+        }
+
+        switch (collision.collider.tag)
+        {
+            case "LillyPad":
+                if (collision.collisionSide == CollisionSide.BOTTOM)
+                {
                     position.y += collision.overlapDistance - 0.1f;
                     movement.velocity = new Vector2(movement.velocity.x,0);
                     gravity.velocity = new Vector2(0,0);
@@ -101,24 +97,18 @@ public class Frog extends GameObject
                     animator.setAnimationIndex(0);
 
                     numJumpsLeft = numJumps;
-                    break;
-            }
-        }
-        else if(collision.collider.tag == "Lava")
-        {
-            if(isAlive)
-            {
+                }
+                break;
+            case "Lava":
                 animator.changeAnimation(3);
                 Die();
-            }
-        }
-        else if(collision.collider.tag == "Meteor")
-        {
-            if(isAlive)
-            {
+
+                break;
+            case "Meteor":
                 animator.changeAnimation(4);
                 Die();
-            }
+
+                break;
         }
     }
 
@@ -172,6 +162,7 @@ public class Frog extends GameObject
 
         int width = Resources.getSystem().getDisplayMetrics().widthPixels;
         int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
         position = new Vector2((width / 2) - 100, (height / 2) - 1);
         collider.UpdateBounds();
         movement.velocity = new Vector2(0,0);

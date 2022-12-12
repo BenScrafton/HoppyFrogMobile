@@ -25,6 +25,7 @@ public class Camera extends Component
         for(Layer layer : GameView.layers)
         {
             Vector2 offset = new Vector2(-1 * gameObject.position.x, -1 * gameObject.position.y);
+
             if(layer.ignoreCameraTranslation)
             {
                 offset = new Vector2(0,0);

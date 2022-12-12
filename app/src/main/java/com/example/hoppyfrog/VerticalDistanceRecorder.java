@@ -32,7 +32,7 @@ public class VerticalDistanceRecorder extends Component
     public void update()
     {
         super.update();
-        Log.e("V: ", Float.toString(movement.velocity.y));
+
         distanceTravelledUp = (startPositionY - recordObject.position.y) / 100;
 
         if( distanceTravelledUp < 0)

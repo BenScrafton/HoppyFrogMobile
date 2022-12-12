@@ -41,7 +41,6 @@ public class Animator extends Component
     @Override
     public void update()
     {
-        //super.update();
         if(isActive)
         {
             updateAnimFrame();

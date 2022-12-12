@@ -188,7 +188,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent)
     {
-        Log.d("Gestures", "onTouch");
         gestureDetector.onTouchEvent(motionEvent);
         return true;
     }
@@ -196,20 +195,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onDown(@NonNull MotionEvent motionEvent)
     {
-        Log.d("Gestures", "onDown");
-        return false;
+          return false;
     }
 
     @Override
     public void onShowPress(@NonNull MotionEvent motionEvent)
     {
-        Log.d("Gestures", "onShowPress");
+
     }
 
     @Override
     public boolean onSingleTapUp(@NonNull MotionEvent motionEvent)
     {
-        Log.d("Gestures", "onSingleTapUp");
+
 
         switch (gameManager.GetGameState())
         {
@@ -229,20 +227,20 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onScroll(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1)
     {
-        Log.d("Gestures", "onScroll");
+
         return false;
     }
 
     @Override
     public void onLongPress(@NonNull MotionEvent motionEvent)
     {
-        Log.d("Gestures", "onLongPress");
+
     }
 
     @Override
     public boolean onFling(@NonNull MotionEvent motionEvent, @NonNull MotionEvent motionEvent1, float v, float v1)
     {
-        Log.d("Gestures", "onFling");
+
         switch (gameManager.GetGameState())
         {
             case BEGIN_PLAY:

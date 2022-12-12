@@ -35,6 +35,8 @@ public class GameActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
+        // Remove the navigation bar from bottom of screen
+        // so screen is filled
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -46,6 +48,7 @@ public class GameActivity extends AppCompatActivity
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         gameView = new GameView(this, this, this);
+
         setContentView(gameView);
     }
 
